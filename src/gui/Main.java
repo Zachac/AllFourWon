@@ -16,14 +16,34 @@ public class Main {
 		System.out.println("System loaded, now exiting.");
 	}
 	
-	/*
-	 * needed UI prompts
-	 * 
-	 * guide author to create paper,
-	 *       which is then submitted
-	 * 
-	 * guide subprogram chair to display valid reviewers,
-	 * 	 	 choose a reviewer,
-	 *       and then attempt to add that reviewer to their paper
-	 */
+	
+	CM.getConferences
+	conference.getRoles
+	//choose conference
+	//submit paper
+		//create paper
+			new Paper(file, authors, title)
+			paper.setLastEdit(date)
+		conference.submitPaper(Paper);
+	//remove paper
+		conference.getPapers(Author);
+		conference.removePaper(Paper);
+
+	
+	CM.getConferences
+	conference.getRoles
+	//choose conference
+	//assign reviewer
+		conference.getPapers(SubProgramChair)
+		//choose paper
+		conference.getReviewers();
+		//choose reviewer
+		reviewer.assign(Paper);
+		//repeat?
+	
+	
+	
+	
+	
+	
 }
