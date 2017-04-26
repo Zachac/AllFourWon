@@ -1,17 +1,34 @@
 package model;
 
-public class SubProgramChair implements Role {
+import java.io.Serializable;
+import java.util.List;
 
+public class SubProgramChair implements Role, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3678435490225778582L;
+
+	//field for paper structure
 	@Override
 	public String getUser() {
 		return null;
 	}
 	
-	public void setPaper() {
+	/**
+	 * Assigns a paper to the subprogram chair to manage.
+	 */
+	public void addPaper(Paper thePaper) {
 		
 	}
 	
-	public Paper getPaper() {
+	/**
+	 * Gets all of the papers that the subprogram chair has been assigned.
+	 * @return list of papers.
+	 */
+	public List<Paper> getPapers() {
 		return null;
 	}
+	
+
 }
