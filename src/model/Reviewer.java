@@ -1,18 +1,15 @@
 package model;
 
-import java.io.Serializable;
-
-public class Reviewer implements Role, Serializable {
+public class Reviewer extends AbstractRole {
 	//#of papers reviewed
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3892385185436691553L;
-
-	@Override
-	public String getUser() {
-		return null;
-	}
+	
+	public Reviewer(String user) {
+       super(user);
+    }
 	
 	/**
 	 * Assigns paper to reviewer.

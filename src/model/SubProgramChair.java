@@ -3,7 +3,6 @@
  */
 package model;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class SubProgramChair implements Role, Serializable, Cloneable {
+public class SubProgramChair extends AbstractRole implements Cloneable {
 	
 	/**
 	 * Generated UID.
@@ -25,7 +24,11 @@ public class SubProgramChair implements Role, Serializable, Cloneable {
 	 */
 	private List<Paper> assignedPapers = new ArrayList<>();
 
-	/**
+	public SubProgramChair(String user) {
+        super(user);
+    }
+
+    /**
 	 * Assigns a paper to the subprogram chair to manage.
 	 */
 	public void addPaper(Paper thePaper) {
@@ -40,11 +43,6 @@ public class SubProgramChair implements Role, Serializable, Cloneable {
 		//NOTE this is currently a mutable object!
 		//should we work on cloning? -Ian
 		return assignedPapers;
-	}
-	
-	@Override
-	public String getUser() {
-		return null;
 	}
 
 }
