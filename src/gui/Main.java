@@ -17,28 +17,28 @@ public class Main {
 	}
 	
 	
-	CM.getConferences
-	conference.getRoles
+	//CM.getConferences
+	//conference.getRoles
 	//choose conference
 	//submit paper
 		//create paper
-			new Paper(file, authors, title)
-			paper.setLastEdit(date)
-		conference.submitPaper(Paper);
+			//new Paper(file, authors, title)
+			//paper.setLastEdit(date)
+		//conference.submitPaper(Paper);
 	//remove paper
-		conference.getPapers(Author);
-		conference.removePaper(Paper);
+		//conference.getPapers(Author);
+		//conference.removePaper(Paper);
 
 	
-	CM.getConferences
-	conference.getRoles
+	//CM.getConferences
+	//conference.getRoles
 	//choose conference
 	//assign reviewer
-		conference.getPapers(SubProgramChair)
+		//conference.getPapers(SubProgramChair)
 		//choose paper
-		conference.getReviewers();
+		//conference.getReviewers();
 		//choose reviewer
-		reviewer.assign(Paper);
+		//dreviewer.assign(Paper);
 		//repeat?
 	
 	
