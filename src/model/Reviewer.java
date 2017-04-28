@@ -5,7 +5,8 @@ import java.util.List;
 
 public class Reviewer extends AbstractRole {
 	
-	private List<Paper> reviewedPapers = new ArrayList<>();
+	private List<Paper> reviewedPapers;
+	private int numberOfReviews;
 	
 	/**
 	 * 
@@ -14,6 +15,8 @@ public class Reviewer extends AbstractRole {
 	
 	public Reviewer(String user) {
        super(user);
+       reviewedPapers = new ArrayList<>();
+       numberOfReviews = 0;
     }
 	
 	/**
