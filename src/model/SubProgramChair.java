@@ -12,7 +12,7 @@ import java.util.List;
  * @version 1.0
  *
  */
-public class SubProgramChair extends AbstractRole implements Cloneable {
+public final class SubProgramChair extends AbstractRole implements Cloneable {
 	
 	/**
 	 * Generated UID.
@@ -24,10 +24,14 @@ public class SubProgramChair extends AbstractRole implements Cloneable {
 	 */
 	private List<Paper> assignedPapers = new ArrayList<>();
 
+	/**
+	 * Constructor for subprogram chair object
+	 * @param user the unique identifier of the user (AKA user name)
+	 */
 	public SubProgramChair(String user) {
         super(user);
     }
-
+	
     /**
 	 * Assigns a paper to the subprogram chair to manage.
 	 */
@@ -38,11 +42,12 @@ public class SubProgramChair extends AbstractRole implements Cloneable {
 	/**
 	 * Gets all of the papers that the subprogram chair has been assigned.
 	 * @return list of papers.
+	 * @throws CloneNotSupportedException 
 	 */
-	public List<Paper> getPapers() {
-		//NOTE this is currently a mutable object!
-		//should we work on cloning? -Ian
-		return assignedPapers;
+	public List<Paper> getPapers() throws CloneNotSupportedException {
+		//make clone of object so list of assigned papers can't be changed elsewhere
+		SubProgramChair copyOfSubProgramChair = (SubProgramChair) this.clone();
+		return copyOfSubProgramChair.assignedPapers;
 	}
 
 }

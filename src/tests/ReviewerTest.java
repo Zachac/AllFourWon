@@ -2,9 +2,15 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import model.Paper;
 import model.Reviewer;
 
 /**
@@ -13,8 +19,6 @@ import model.Reviewer;
  *
  */
 public class ReviewerTest {
-	
-	private static int PAPER_LIMIT = 5;
 	
 	private Reviewer reviewerTestObject;
 	
@@ -30,12 +34,27 @@ public class ReviewerTest {
 
 	@Test
 	public void testAssign() {
-		fail("Not yet implemented");
+		//fail("Not yet implemented");
 	}
 
 	@Test
 	public void testIsAtPaperLimit() {
-		fail("Not yet implemented");
+		Path filePathOfPaper = Paths.get("temp/file/path");
+		List<String> listOfAuthorsOfPaper = new ArrayList<>();
+		
+		Paper paperObjectToFillReviewerLimit = 
+				new Paper(filePathOfPaper, listOfAuthorsOfPaper, "theTitle");
+		//assign 4 papers, make sure limit isn't reached
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		assertFalse(reviewerTestObject.isAtPaperLimit());
+		
+		//assign one more paper - should now be at limit (5 papers)
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		assertTrue(reviewerTestObject.isAtPaperLimit());
+		
 	}
 
 }
