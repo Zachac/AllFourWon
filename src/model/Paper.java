@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 public class Paper implements Serializable {
@@ -10,22 +11,25 @@ public class Paper implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -7258827148995367406L;
+	private Date submissionDate;
 
+	
+	
 	/**
 	 * Constructor for paper object.
 	 * @param file
 	 * @param authors
 	 * @param title
 	 */
-	public Paper(Path theFilePath, List<String> theAuthors, String theTitle) {
-		
+	public Paper(Path theFilePath, List<Author> theAuthors, String theTitle) {
+		submissionDate = new Date(); //creates a new date at the current time -zach
 	}
 	
 	/**
 	 * Gets the authors for the paper.
 	 * @return list of the author names.
 	 */
-	public List<String> getAuthors() {
+	public List<Author> getAuthors() {
 		return null;
 	}
 	
@@ -47,5 +51,12 @@ public class Paper implements Serializable {
 		 * -Zach
 		 */
 		return null;
+	}
+
+	/**
+	 * @return the submissionDate
+	 */
+	public Date getSubmissionDate() {
+		return submissionDate;
 	}
 }
