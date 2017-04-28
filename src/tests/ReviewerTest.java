@@ -17,34 +17,61 @@ import model.Reviewer;
 /**
  * JUnit tests for Reviewer class
  * @author Ian Jury
- *
+ * @version 1.0
  */
 public class ReviewerTest {
-	
+	/** Reviewer object to be used as test subject */
 	private Reviewer reviewerTestObject;
+	
+	/** File path for test paper object*/
+	private Path filePathOfPaper;
+	
+	/** List of authors for paper object */
+	private List<Author> listOfAuthorsOfPaper;
+	
+	/** Paper object to test reviewer limit */
+	private Paper paperObjectToFillReviewerLimit;
+	
+	/** Paper object to test proper assignment */
+	private Paper paperObjectToCheckAssignment;
+	
+	/** Name of author for paper object*/
+	private String nameOfAnAuthor = "JSmith";
+	
+	/** Title of paper for paper object*/
+	private String titleOfPaper = "Test Title";
 	
 	@Before
 	public void setup() {
-		reviewerTestObject = new Reviewer("JSmith");
+		reviewerTestObject = new Reviewer(nameOfAnAuthor);
+		filePathOfPaper = Paths.get("temp/file/path");
+		listOfAuthorsOfPaper = new ArrayList<>();
+		paperObjectToFillReviewerLimit = 
+				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
+		
+		paperObjectToCheckAssignment =
+				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
+		
 	}
 
 	@Test
 	public void testGetUser() {
-		assertEquals(reviewerTestObject.getUser(), "JSmith");
+		assertEquals(reviewerTestObject.getUser(), nameOfAnAuthor);
 	}
 
 	@Test
 	public void testAssign() {
-		//fail("Not yet implemented");
+		//check if empty
+		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
+		//assign 1 paper and test
+		reviewerTestObject.assign(paperObjectToCheckAssignment);
+		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
+		
 	}
 
 	@Test
 	public void testIsAtPaperLimit() {
-		Path filePathOfPaper = Paths.get("temp/file/path");
-		List<Author> listOfAuthorsOfPaper = new ArrayList<>();
-		
-		Paper paperObjectToFillReviewerLimit = 
-				new Paper(filePathOfPaper, listOfAuthorsOfPaper, "theTitle");
+
 		//assign 4 papers, make sure limit isn't reached
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);

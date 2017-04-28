@@ -14,15 +14,12 @@ import java.util.List;
  */
 public final class SubProgramChair extends AbstractRole implements Cloneable {
 	
-	/**
-	 * Generated UID.
-	 */
+	/** Generated UID.*/
 	private static final long serialVersionUID = 3678435490225778582L;
 	
-	/**
-	 * List of assigned papers to subprogram chair.
-	 */
+	/** List of assigned papers to subprogram chair.*/
 	private List<Paper> assignedPapers = new ArrayList<>();
+	
 
 	/**
 	 * Constructor for subprogram chair object

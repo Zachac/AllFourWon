@@ -43,5 +43,10 @@ public class Reviewer extends AbstractRole {
 		}
 		
 	}
+	
+	public int getNumberOfReviews() {
+		//also needed this
+		return numberOfReviews;
+	}
 
 }
