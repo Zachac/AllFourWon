@@ -2,7 +2,10 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
+
+import model.Reviewer;
 
 /**
  * JUnit tests for Reviewer class
@@ -10,10 +13,19 @@ import org.junit.Test;
  *
  */
 public class ReviewerTest {
+	
+	private static int PAPER_LIMIT = 5;
+	
+	private Reviewer reviewerTestObject;
+	
+	@Before
+	public void setup() {
+		reviewerTestObject = new Reviewer("JSmith");
+	}
 
 	@Test
 	public void testGetUser() {
-		fail("Not yet implemented");
+		assertEquals(reviewerTestObject.getUser(), "JSmith");
 	}
 
 	@Test
