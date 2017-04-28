@@ -1,7 +1,12 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Reviewer extends AbstractRole {
-	//#of papers reviewed
+	
+	private List<Paper> reviewedPapers = new ArrayList<>();
+	
 	/**
 	 * 
 	 */
