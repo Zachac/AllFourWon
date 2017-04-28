@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import model.Author;
 import model.Paper;
 import model.Reviewer;
 
@@ -40,7 +41,7 @@ public class ReviewerTest {
 	@Test
 	public void testIsAtPaperLimit() {
 		Path filePathOfPaper = Paths.get("temp/file/path");
-		List<String> listOfAuthorsOfPaper = new ArrayList<>();
+		List<Author> listOfAuthorsOfPaper = new ArrayList<>();
 		
 		Paper paperObjectToFillReviewerLimit = 
 				new Paper(filePathOfPaper, listOfAuthorsOfPaper, "theTitle");
