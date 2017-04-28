@@ -25,7 +25,7 @@ public class Reviewer extends AbstractRole {
 	 * @return true if assignable, false otherwise.
 	 */
 	public boolean assign(Paper p) {
-		//increment reviews
+		numberOfReviews++;
 		return false;
 	}
 	
