@@ -72,14 +72,17 @@ public class ReviewerTest {
 	@Test
 	public void testIsAtPaperLimit() {
 
-		//assign 4 papers, make sure limit isn't reached
+		//assign 7 papers, make sure limit isn't reached
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 		
-		//assign one more paper - should now be at limit (5 papers)
+		//assign one more paper - should now be at limit (8 papers)
 		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		assertTrue(reviewerTestObject.isAtPaperLimit());
 		

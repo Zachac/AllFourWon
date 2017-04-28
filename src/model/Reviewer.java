@@ -36,7 +36,7 @@ public class Reviewer extends AbstractRole {
 	public boolean isAtPaperLimit() {
 		//I implemented this just so I could finish the test. 
 		//feel free to rework it. -Ian
-		if (numberOfReviews == 5) {
+		if (numberOfReviews == 8) {
 			return true;
 		} else {
 			return false;
