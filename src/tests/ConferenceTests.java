@@ -2,6 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -138,5 +140,47 @@ public class ConferenceTests {
 		assertTrue(simpleConference.getPapers(brian).size()		== 5);
 		assertTrue(simpleConference.getPapers(kevin).size() 	== 5);
 	}
+	
+	/**
+	 * Tests if paper removal method works properly.
+	 * @author Ian Jury
+	 */
+	@Test
+	public void testPaperRemoval() {
+		//set up conference and paper
+		Conference conferenceToTestPaperRemoval = new Conference();
+		Author testAuthor = new Author("AuthorName");
+		List<Author> authors = new LinkedList<Author>();
+		authors.add(testAuthor);
+		Path filePathOfPaper = Paths.get("temp/file/path");
+		Paper paperToTestRemoval = new Paper(filePathOfPaper, authors, "Paper name");
+		
+		//submit and remove
+		conferenceToTestPaperRemoval.submitPaper(paperToTestRemoval);
+		conferenceToTestPaperRemoval.removePaper(paperToTestRemoval);
+		
+		//should be 0 if removed successfully 
+		assertEquals(conferenceToTestPaperRemoval.getPapers(testAuthor).size(), 0);
+	}
+	
+	/**
+	 * Tests if getter for papers in conference works properly.
+	 * @author Ian Jury
+	 */
+	@Test
+	public void testGetPapers() {
+		Conference conferenceToTestGetPapers = new Conference();
+		Author testAuthor = new Author("AuthorName");
+		List<Author> authors = new LinkedList<Author>();
+		authors.add(testAuthor);
+		Path filePathOfPaper = Paths.get("temp/file/path");
+		Paper paperToTestGetPapers = new Paper(filePathOfPaper, authors, "Paper name");
+		
+		conferenceToTestGetPapers.submitPaper(paperToTestGetPapers);
+		
+		assertEquals(conferenceToTestGetPapers.getPapers(testAuthor), paperToTestGetPapers);
+		
+	}
+	
 
 }
