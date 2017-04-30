@@ -264,4 +264,25 @@ public class ConferenceTests {
 		assertEquals(reviewerList.get(1).getUser(), "janedoe");
 		assertEquals(reviewerList.get(2).getUser(), "johnnyMcJohnnyface");
 	}
+	
+	/**
+	 * Testing the addAuthor method and getAuthor method in Conference class.
+	 * @author Dmitriy Bliznyuk
+	 */
+	@Test
+	public void testAddGetAuthor() {
+		Conference testConference = new Conference();
+		testConference.addAuthor("johndoe");
+		testConference.addAuthor("janedoe");
+		testConference.addAuthor("johnnyMcJohnnyface");
+		
+		Author authorOne = testConference.getAuthor("johndoe");
+		assertEquals(authorOne.getUser(), "johndoe");
+		
+		Author authorTwo = testConference.getAuthor("janedoe");
+		assertEquals(authorTwo.getUser(), "janedoe");
+		
+		Author authorThree = testConference.getAuthor("johnnyMcJohnnyface");
+		assertEquals(authorThree.getUser(), "johnnyMcJohnnyface");
+	}
 }
