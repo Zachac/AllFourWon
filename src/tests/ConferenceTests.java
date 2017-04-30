@@ -285,4 +285,13 @@ public class ConferenceTests {
 		Author authorThree = testConference.getAuthor("johnnyMcJohnnyface");
 		assertEquals(authorThree.getUser(), "johnnyMcJohnnyface");
 	}
+	
+	/**
+	 * Testing if the isAuthorAtPaperLimit returns the correct boolean value when
+	 * author submits the allowed amount of papers.
+	 * @author Dmitriy Bliznyuk
+	 */
+	public void testIsAuthorAtPaperLimit() {
+		
+	}
 }
