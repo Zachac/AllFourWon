@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.Author;
-import model.AbstractRole;
-import model.Conference;
 
 public class AuthorTest {
 

@@ -15,6 +15,8 @@ import model.Author;
 import model.Conference;
 import model.Paper;
 import model.Reviewer;
+import model.Role;
+import model.SubProgramChair;
 
 public class ConferenceTests {
 	
@@ -146,109 +148,163 @@ public class ConferenceTests {
 		assertTrue(simpleConference.getPapers(kevin).size() 	== 5);
 	}
 	
-	/**
-	 * Tests if paper removal method works properly.
-	 * @author Ian Jury
-	 */
-	@Test
-	public void testPaperRemoval() {
-		//set up conference and paper
-		Conference conferenceToTestPaperRemoval = new Conference();
-		Author testAuthor = new Author("AuthorName");
-		List<Author> authors = new LinkedList<Author>();
-		authors.add(testAuthor);
-		Path filePathOfPaper = Paths.get("temp/file/path");
-		Paper paperToTestRemoval = new Paper(filePathOfPaper, authors, "Paper name");
-		
-		//submit and remove
-		conferenceToTestPaperRemoval.submitPaper(paperToTestRemoval);
-		conferenceToTestPaperRemoval.removePaper(paperToTestRemoval);
-		
-		//should be 0 if removed successfully 
-		assertEquals(conferenceToTestPaperRemoval.getPapers(testAuthor).size(), 0);
-	}
+
+    
+    /**
+     * Tests if paper removal method works properly.
+     * @author Ian Jury
+     */
+    @Test
+    public void testPaperRemoval() {
+        //set up conference and paper
+        Conference conferenceToTestPaperRemoval = new Conference();
+        conferenceToTestPaperRemoval.setDeadline(new Date(new Date().getTime() + 50000));
+        
+        conferenceToTestPaperRemoval.addAuthor("AuthorName");
+        
+        List<Author> authors = new LinkedList<Author>();
+        authors.add(conferenceToTestPaperRemoval.getAuthor("AuthorName"));
+        Path filePathOfPaper = Paths.get("temp/file/path");
+        Paper paperToTestRemoval = new Paper(filePathOfPaper, authors, "Paper name");
+        
+        //submit and remove
+        assertTrue(conferenceToTestPaperRemoval.submitPaper(paperToTestRemoval));
+        assertTrue(conferenceToTestPaperRemoval.removePaper(paperToTestRemoval));
+        
+        //should be 0 if removed successfully 
+        assertEquals(conferenceToTestPaperRemoval.getPapers(authors.get(0)).size(), 0);
+    }
+    
+    /**
+     * Tests if getter for papers in conference works properly.
+     * @author Ian Jury
+     */
+    @Test
+    public void testGetPapers() {
+        Conference conferenceToTestGetPapers = new Conference();
+        conferenceToTestGetPapers.setDeadline(new Date(new Date().getTime() + 5000));
+        
+        conferenceToTestGetPapers.addAuthor("AuthorName");
+        Author testAuthor = conferenceToTestGetPapers.getAuthor("AuthorName");
+        List<Author> authors = new LinkedList<Author>();
+        authors.add(testAuthor);
+        
+        Path filePathOfPaper = Paths.get("temp/file/path");
+        Paper paperToTestGetPapers = new Paper(filePathOfPaper, authors, "Paper name");
+        
+        conferenceToTestGetPapers.submitPaper(paperToTestGetPapers);
+        
+        List<Paper> papers = conferenceToTestGetPapers.getPapers(testAuthor);
+        
+        assertTrue(papers.size() == 1);
+        assertEquals(papers.get(0), paperToTestGetPapers);
+    }
 	
 	/**
-	 * Tests if getter for papers in conference works properly.
-	 * @author Ian Jury
-	 */
-	@Test
-	public void testGetPapers() {
-		Conference conferenceToTestGetPapers = new Conference();
-		Author testAuthor = new Author("AuthorName");
-		List<Author> authors = new LinkedList<Author>();
-		authors.add(testAuthor);
-		Path filePathOfPaper = Paths.get("temp/file/path");
-		Paper paperToTestGetPapers = new Paper(filePathOfPaper, authors, "Paper name");
-		
-		conferenceToTestGetPapers.submitPaper(paperToTestGetPapers);
-		
-		assertEquals(conferenceToTestGetPapers.getPapers(testAuthor), paperToTestGetPapers);
-		
-	}
-	/**
-	 * Tests if boolean variable for the submission limit is working.
-	 * @author Kevin Nguyen
-	 */
-	@Test
-	public void testAuthorPaperLimit() {
-		Conference conferencePaperLimit = new Conference();
-		Author testAuthor = new Author("Sam");
-		//Should the add author method take in the Author class?
-		/* I think the parameter for addAuthor should be Author rather than strings
-		 * Since (atleast for this test) I can't call the author paper limit 
-		 * method. It kinda makes it long 
-		 */
-		conferencePaperLimit.addAuthor("Sam"); 
-		List<Author> authors = new LinkedList<Author>();
-		authors.add(testAuthor);
-		Author sam = conferencePaperLimit.getAuthor("sam");
+     * Tests if boolean variable for the submission limit is working.
+     * @author Kevin Nguyen
+     */
+    @Test
+    public void testAuthorPaperLimit() {
 
-		Path filePathOfPaper = Paths.get("temp/file/path");
-		Paper mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
-		//I don't know the author add paper method yet since it was empty
-		//assuming it will be like this -> testAuthor.addPaper(mockPaperTest);
-		assertTrue(conferencePaperLimit.isAuthorAtPaperLimit(testAuthor));
-		//Do I need to make unique parameters for the Papers?
-		Paper fiveAuthors1 = new Paper(null, authors, "Just a Paper");
-		Paper fiveAuthors2 = new Paper(null, authors, "Just a Paper");
-		Paper fiveAuthors3 = new Paper(null, authors, "Just a Paper");
-		Paper fiveAuthors4 = new Paper(null, authors, "Just a Paper");
-		Paper fiveAuthors5 = new Paper(null, authors, "Just a Paper");
-		Paper fiveAuthors6 = new Paper(null, authors, "Just a Paper");
-		//This should return false
-		assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(testAuthor));
-	}
-	/**
-	 * Tests if roles are correctly identified in the conference.
-	 * Not sure if testing right since its a tree map I presume.
-	 * @author Kevin Nguyen
-	 */
-	@Test
-	public void testGetRoles() {
-		Conference conRole = new Conference();
-		conRole.addAuthor("Ian"); 
-		Author ian = new Author("Ian");
-		conRole.addAuthor("Jury");
-		Author jury = conRole.getAuthor("Jury");
-		conRole.addReviewer("Zach");
-		conRole.addReviewer("Chandler");
-		conRole.addSubprogramChair("Dimitry");
-		conRole.addSubprogramChair("Bliznyuk");
-		//I think this failed because returned memory address.
-		assertEquals(conRole.getRoles("Ian"), "Author");
-		assertEquals(conRole.getAuthor("Jury"), "Author");
-		assertEquals(conRole.getRoles("Zach"), "Reviewer");
-		List<Author> authors = new LinkedList<Author>();
-		authors.add(jury);
-		assertEquals(conRole.getRoles(authors.get(0).toString()), "Author");
-		assertEquals(conRole.getRoles("Bliznyuk"), "SubProgramChair");
-		assertEquals(conRole.getRoles("Zach"), "Reviewer");
+        Conference conferencePaperLimit = new Conference();
+        conferencePaperLimit.setDeadline(new Date(new Date().getTime() + 50000));
+        conferencePaperLimit.addAuthor("sam"); 
+        Author sam = conferencePaperLimit.getAuthor("sam"); //add author takes in a string and creates the author object from there.
 
-		
-		
-	}
+        List<Author> authors = new LinkedList<Author>();
+        authors.add(sam);
+        assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+        
+        Path filePathOfPaper = Paths.get("temp/file/path");
+        Paper mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+        assertTrue(conferencePaperLimit.submitPaper(mockPaperTest)); // papers are added to conferences
+        assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+        
+        mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper"); // I don't think there is a need for unique parameters
+        assertTrue(conferencePaperLimit.submitPaper(mockPaperTest));
+        assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+
+        mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+        assertTrue(conferencePaperLimit.submitPaper(mockPaperTest));
+        assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+
+        mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+        assertTrue(conferencePaperLimit.submitPaper(mockPaperTest));
+        assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+
+        mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+        assertTrue(conferencePaperLimit.submitPaper(mockPaperTest));
+        assertTrue(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+        
+        mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+        assertFalse(conferencePaperLimit.submitPaper(mockPaperTest));
+        assertTrue(conferencePaperLimit.isAuthorAtPaperLimit(sam));
+    }
 	
+	/**
+     * Tests if roles are correctly identified in the conference.
+     * Not sure if testing right since its a tree map I presume.
+     * @author Kevin Nguyen
+     */
+    @Test
+    public void testGetRoles() {
+        Conference conRole = new Conference();
+        
+        conRole.addAuthor("Ian"); 
+        conRole.addReviewer("Ian");
+        
+        conRole.addSubprogramChair("Zach");
+        
+        conRole.addAuthor("Dimitry");
+        conRole.addSubprogramChair("Dimitry");
+        conRole.addReviewer("Dimitry");
+
+        List<Role> roles = conRole.getRoles("Ian");
+        boolean foundAuthor = false;
+        boolean foundReviewer = false;
+        for (Role r : roles) {
+            if (!foundAuthor && r instanceof Author) {
+                foundAuthor = true;
+            }
+            if (!foundReviewer && r instanceof Reviewer) {
+                foundReviewer = true;
+            }
+        }
+        assertTrue(foundAuthor);
+        assertTrue(foundReviewer);
+        
+
+        roles = conRole.getRoles("Zach");
+        boolean foundSubProgramChair = false;
+        for (Role r : roles) {
+            if (!foundSubProgramChair && r instanceof SubProgramChair) {
+                foundSubProgramChair = true;
+            }
+        }
+        assertTrue(foundSubProgramChair);
+        
+
+        roles = conRole.getRoles("Dimitry");
+        foundSubProgramChair = false;
+        foundAuthor = false;
+        foundReviewer = false;
+        for (Role r : roles) {
+            if (!foundSubProgramChair && r instanceof SubProgramChair) {
+                foundSubProgramChair = true;
+            }
+            if (!foundAuthor && r instanceof Author) {
+                foundAuthor = true;
+            }
+            if (!foundReviewer && r instanceof Reviewer) {
+                foundReviewer = true;
+            }
+        }
+        assertTrue(foundSubProgramChair);
+        assertTrue(foundAuthor);
+        assertTrue(foundReviewer);
+        
+    }
 	/**
 	 * Testing the addReviewer method and the getReviewer method in Conference class.
 	 * @author Dmitriy Bliznyuk
@@ -261,9 +317,12 @@ public class ConferenceTests {
 		testConference.addReviewer("johnnyMcJohnnyface");
 		
 		List<Reviewer> reviewerList = testConference.getReviewers();
-		assertEquals(reviewerList.get(0).getUser(), "johndoe");
-		assertEquals(reviewerList.get(1).getUser(), "janedoe");
-		assertEquals(reviewerList.get(2).getUser(), "johnnyMcJohnnyface");
+		
+		assertTrue(reviewerList.size() == 3);
+		
+		for (Reviewer r : reviewerList) {
+		    assertTrue(r.getUser().equals("johndoe") || r.getUser().equals("janedoe") || r.getUser().equals("johnnyMcJohnnyface"));
+		}
 	}
 	
 	/**
@@ -295,6 +354,7 @@ public class ConferenceTests {
 	@Test
 	public void testIsAuthorAtPaperLimit() {
 		Conference testConference = new Conference();
+		testConference.setDeadline(new Date(new Date().getTime() + 50000));
 		
 		Path filePathOfPaper = Paths.get("temp/file/path");
 		List<Author> listOfAuthorsOfPaper = new ArrayList<>();
@@ -327,6 +387,6 @@ public class ConferenceTests {
 		testConference.submitPaper(paperTestFive);
 		
 		//author has submitted 5 papers (should return true)
-		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
+		assertTrue(testConference.isAuthorAtPaperLimit(testAuthor));
 	}
 }

@@ -28,7 +28,7 @@ public class SubProgramTest {
 	/** The name of the SubP. Chair */
 	private String subName = "Boo";
 	/** List of Papers that are assigned to the subprogram chair */
-	private List<Paper> paperList;
+	//private List<Paper> paperList;
 	/** List of authors for paper object */
 	private List<Author> listOfAuthorsForPaper;
 	/** A paper to add for testing. */
@@ -40,7 +40,7 @@ public class SubProgramTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		paperList = new ArrayList<>();
+		//paperList = new ArrayList<>();
 		paperFilePath = Paths.get("temp/file/path");
 		listOfAuthorsForPaper = new ArrayList<>();
 		listOfAuthorsForPaper.add(new Author("Ian"));

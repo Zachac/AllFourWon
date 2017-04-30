@@ -12,76 +12,76 @@ import java.util.List;
  */
 public class Reviewer extends AbstractRole {
 
-	/**
-	 * The maximum number of papers that a Reviewer is allowed to review.
-	 */
-	public static int REVIEW_LIMIT = 8;
-	
-	/**
-	 * The list of papers that have been reviewed by the Reviewer.
-	 */
-	private List<Paper> reviewedPapers;
-	
-	/**
-	 * The list of papers yet to be reviewed by the Reviewer.
-	 */
-	private List<Paper> papersToBeReviewed;
-	
-	/**
-	 * Number of total number of papers assigned to the Reviewer.
-	 */
-	private int numberOfReviews;
+    /**
+     * The maximum number of papers that a Reviewer is allowed to review.
+     */
+    public static int REVIEW_LIMIT = 8;
+    
+    /**
+     * The list of papers that have been reviewed by the Reviewer.
+     */
+    //private List<Paper> reviewedPapers;
+    
+    /**
+     * The list of papers yet to be reviewed by the Reviewer.
+     */
+    private List<Paper> papersToBeReviewed;
+    
+    /**
+     * Number of total number of papers assigned to the Reviewer.
+     */
+    private int numberOfReviews;
 
-	/** Generated UID.*/
-	private static final long serialVersionUID = -3892385185436691553L;
+    /** Generated UID.*/
+    private static final long serialVersionUID = -3892385185436691553L;
 
-	/**
-	 * Constructor for the Reviewer class that sets of the Reviewer.
-	 * @param user the unique user identifier
-	 */
-	public Reviewer(String user) {
+    /**
+     * Constructor for the Reviewer class that sets of the Reviewer.
+     * @param user the unique user identifier
+     */
+    public Reviewer(String user) {
        super(user);
-       reviewedPapers = new ArrayList<>();
+       //reviewedPapers = new ArrayList<>();
        papersToBeReviewed = new ArrayList<>();
        numberOfReviews = 0;
     }
 
-	/**
-	 * Assigns paper to reviewer.
-	 * @param p the Paper assigned to reviewer.
-	 * @return true if assignable, false otherwise.
-	 */
-	public boolean assign(Paper p) {
-		boolean authorIsDifferent = true;
-		List<Author> authorList = p.getAuthors();
-		//testing if the author name is
-		for(int i = 0; i < authorList.size(); i++) {
-			if(authorList.get(i).getUser().equals(this.getUser())) {
-				authorIsDifferent = false;
-			}
-		}
-		if (authorIsDifferent && !isAtPaperLimit()) {
-			numberOfReviews++;
-			papersToBeReviewed.add(p);
-		}
-		
-		return authorIsDifferent && !isAtPaperLimit();
-	}
+    /**
+     * Assigns paper to reviewer.
+     * @param p the Paper assigned to reviewer.
+     * @return true if assignable, false otherwise.
+     */
+    public boolean assign(Paper p) {
+        boolean authorIsDifferent = true;
+        List<Author> authorList = p.getAuthors();
+        //testing if the author name is
+        for(int i = 0; i < authorList.size(); i++) {
+            if(authorList.get(i).getUser().equals(this.getUser())) {
+                authorIsDifferent = false;
+            }
+        }
+        if (authorIsDifferent && !isAtPaperLimit()) {
+            numberOfReviews++;
+            papersToBeReviewed.add(p);
+        }
+        
+        return authorIsDifferent && !isAtPaperLimit();
+    }
 
-	/**
-	 * Checks if reviewer is at review limit.
-	 * @return true if at paper limit, false otherwise.
-	 */
-	public boolean isAtPaperLimit() {
-		return numberOfReviews >= REVIEW_LIMIT;
-	}
+    /**
+     * Checks if reviewer is at review limit.
+     * @return true if at paper limit, false otherwise.
+     */
+    public boolean isAtPaperLimit() {
+        return numberOfReviews >= REVIEW_LIMIT;
+    }
 
-	/**
-	 * Finds out how many papers the Reviewer was assigned to.
-	 * @return int number of reviews the Reviewer was assigned to
-	 */
-	public int getNumberOfReviews() {
-		return numberOfReviews;
-	}
+    /**
+     * Finds out how many papers the Reviewer was assigned to.
+     * @return int number of reviews the Reviewer was assigned to
+     */
+    public int getNumberOfReviews() {
+        return numberOfReviews;
+    }
 
 }
