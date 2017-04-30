@@ -36,13 +36,26 @@ public class PaperTest {
 	public void setUp() {
 		filePathOfPaper = Paths.get("temp/file/path");
 		listOfAuthorsOfPaper = new ArrayList<>();
+		listOfAuthorsOfPaper.add(new Author("James"));
+		listOfAuthorsOfPaper.add(new Author("John"));
 		
 		paperTestObject = new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 	}
 	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void getAuthorsTest() {
+		List<Author> returnedAuthors = paperTestObject.getAuthors();
+		assertEquals(returnedAuthors.get(0), "James");
+		assertEquals(returnedAuthors.get(0), "John");
 	}
 
+	@Test
+	public void getTitleTest() {
+		assertEquals(paperTestObject.getTitle(), "Example");
+	}
+	
+	@Test
+	public void getDocumentPathTest() {
+		assertEquals(paperTestObject.getDocumentPath(), "filePathOfPaper");
+	}
 }

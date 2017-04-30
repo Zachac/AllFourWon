@@ -55,7 +55,7 @@ public class Reviewer extends AbstractRole {
 		boolean authorIsDifferent = true;
 		List<Author> authorList = p.getAuthors();
 		
-		//testing if the author name is same as reviewer name
+		//testing if the author name is
 		for(int i = 0; i < authorList.size(); i++) {
 			if(authorList.get(i).getUser().equals(this.getUser())) {
 				authorIsDifferent = false;
