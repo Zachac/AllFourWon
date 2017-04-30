@@ -65,14 +65,10 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		//assign 1 paper and test
 		reviewerTestObject.assign(paperObjectToCheckAssignment);
-		
-		//this test causes a null pointer exception - dmitriy
-		//should i be testing if the author is same as reviewer? maybe thats why - dmitriy
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
 		
 	}
 
-	//i assume this test fails for the same reason as the one above - dmitriy
 	@Test
 	public void testIsAtPaperLimit() {
 
