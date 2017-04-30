@@ -181,14 +181,5 @@ public class ConferenceTests {
 		assertEquals(conferenceToTestGetPapers.getPapers(testAuthor), paperToTestGetPapers);
 		
 	}
-	
-	//These are the next three methods for Brian to test
-//	public List<Paper> getPapers(Author a) 
-//	
-//	public Date getDeadline() 
-//	
-//	public void setDeadline(Date d)
-	
-	
 
 }
