@@ -57,12 +57,27 @@ public class Conference implements Serializable {
     
     /**
      * Adds a paper to the conference
+     * 
+     * If the same paper is submitted more than once, it should
+     * always return true without any changes. papers are immutable, so a second submission
+     * shouldn't change anything.
+     * 
+     * If a paper is submitted after the deadline, this function should return false
+     * and nothing in the conferences should change.
+     * 
+     * If a paper was submitted while one of the authors is at max paper limit,
+     * it should return false and nothing in the conference should change.
+     * 
      * @author Zachary Chandler
      * 
      * @param p the paper
      * @return if it successfully submits the paper
      */
     public boolean submitPaper(Paper p) {
+        if (papers.contains(p)) {
+            return true;
+        }
+        
         if (!isBeforeSubmissionDeadline(p.getSubmissionDate())) {
             return false;
         }

@@ -32,12 +32,36 @@ public class ConferenceTests {
 		assertTrue(emptyConference.getReviewers().size() == 0);
 	}
 
-	/**
-	 * A test for submitting a paper with only one Author.
+    /**
+     * A test for submitting a paper that was already submitted.
      * @author Zachary Chandler
-	 */
-	@Test
-	public void testPaperSubmissionOneAuthor() {
+     */
+    @Test
+    public void testPaperSubmissionSamePaper() { 
+        Conference simpleConference = new Conference();
+        simpleConference.setDeadline(new Date(new Date().getTime() + 5000));
+        simpleConference.addAuthor("zachac");
+        
+        Author zach = simpleConference.getAuthor("zachac");
+        
+
+        List<Author> authors = new LinkedList<Author>();
+        authors.add(zach);
+
+        Paper justZach1 = new Paper(null, authors, "Just Zach's Paper");
+        assertTrue(simpleConference.submitPaper(justZach1));
+        assertTrue(simpleConference.getPapers(zach).size() == 1);
+        
+        assertTrue(simpleConference.submitPaper(justZach1));
+        assertTrue(simpleConference.getPapers(zach).size() == 1);
+    }
+
+    /**
+     * A test for submitting a paper with only one Author.
+     * @author Zachary Chandler
+     */
+    @Test
+    public void testPaperSubmissionOneAuthor() {
 		Conference simpleConference = new Conference();
 		simpleConference.setDeadline(new Date(new Date().getTime() + 5000));
 		simpleConference.addAuthor("zachac");
@@ -345,48 +369,104 @@ public class ConferenceTests {
 		Author authorThree = testConference.getAuthor("johnnyMcJohnnyface");
 		assertEquals(authorThree.getUser(), "johnnyMcJohnnyface");
 	}
-	
-	/**
-	 * Testing if the isAuthorAtPaperLimit returns the correct boolean value when
-	 * author submits the allowed amount of papers.
-	 * @author Dmitriy Bliznyuk
-	 */
-	@Test
-	public void testIsAuthorAtPaperLimit() {
-		Conference testConference = new Conference();
-		testConference.setDeadline(new Date(new Date().getTime() + 50000));
-		
-		Path filePathOfPaper = Paths.get("temp/file/path");
-		List<Author> listOfAuthorsOfPaper = new ArrayList<>();
-		Author testAuthor = new Author("James");
-		listOfAuthorsOfPaper.add(testAuthor);
-		String firstPaper = "ExampleOne";
-		String secondPaper = "ExampleTwo";
-		String thirdPaper = "ExampleThree";
-		String fourthPaper = "ExampleFour";
-		String fifthPaper = "ExampleFive";
-		
-		Paper paperTestOne = new Paper(filePathOfPaper, listOfAuthorsOfPaper, firstPaper);
-		Paper paperTestTwo = new Paper(filePathOfPaper, listOfAuthorsOfPaper, secondPaper);
-		Paper paperTestThree = new Paper(filePathOfPaper, listOfAuthorsOfPaper, thirdPaper);
-		Paper paperTestFour = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fourthPaper);
-		Paper paperTestFive = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fifthPaper);
-		
-		testConference.addAuthor("James");
-		//author hasn't submitted a single paper (should return false)
-		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
-		
-		testConference.submitPaper(paperTestOne);
-		testConference.submitPaper(paperTestTwo);
-		testConference.submitPaper(paperTestThree);
-		testConference.submitPaper(paperTestFour);
-		
-		//author has submitted 4 papers (should return false)
-		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
-		
-		testConference.submitPaper(paperTestFive);
-		
-		//author has submitted 5 papers (should return true)
-		assertTrue(testConference.isAuthorAtPaperLimit(testAuthor));
-	}
+
+    /**
+     * Testing if the isAuthorAtPaperLimit returns the correct boolean value when
+     * author submits the allowed amount of papers.
+     * @author Dmitriy Bliznyuk
+     */
+    @Test
+    public void testIsAuthorAtPaperLimit() {
+        Conference testConference = new Conference();
+        testConference.setDeadline(new Date(new Date().getTime() + 50000));
+        
+        Path filePathOfPaper = Paths.get("temp/file/path");
+        List<Author> listOfAuthorsOfPaper = new ArrayList<>();
+        Author testAuthor = new Author("James");
+        listOfAuthorsOfPaper.add(testAuthor);
+        String firstPaper = "ExampleOne";
+        String secondPaper = "ExampleTwo";
+        String thirdPaper = "ExampleThree";
+        String fourthPaper = "ExampleFour";
+        String fifthPaper = "ExampleFive";
+        
+        Paper paperTestOne = new Paper(filePathOfPaper, listOfAuthorsOfPaper, firstPaper);
+        Paper paperTestTwo = new Paper(filePathOfPaper, listOfAuthorsOfPaper, secondPaper);
+        Paper paperTestThree = new Paper(filePathOfPaper, listOfAuthorsOfPaper, thirdPaper);
+        Paper paperTestFour = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fourthPaper);
+        Paper paperTestFive = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fifthPaper);
+        
+        testConference.addAuthor("James");
+        //author hasn't submitted a single paper (should return false)
+        assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
+        
+        testConference.submitPaper(paperTestOne);
+        testConference.submitPaper(paperTestTwo);
+        testConference.submitPaper(paperTestThree);
+        testConference.submitPaper(paperTestFour);
+        
+        //author has submitted 4 papers (should return false)
+        assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
+        
+        testConference.submitPaper(paperTestFive);
+        
+        //author has submitted 5 papers (should return true)
+        assertTrue(testConference.isAuthorAtPaperLimit(testAuthor));
+    }
+    
+    /**
+     * Testing deadline business rule.
+     * @author Zachary Chandler
+     */
+    @Test
+    public void testIsBeforeSubmissionDeadlineBeforeSubmissionDeadline() {
+        Conference deadlineConference = new Conference();
+        Date time = new Date();
+        
+        deadlineConference.setDeadline(time);
+        time.setTime(time.getTime() - (24 * 60 * 60 * 1000));
+        assertTrue(deadlineConference.isBeforeSubmissionDeadline(time));
+    }
+    
+    /**
+     * Testing deadline business rule.
+     * @author Zachary Chandler
+     */
+    @Test
+    public void testIsBeforeSubmissionDeadlineJustBeforeSubmissionDeadline() {
+        Conference deadlineConference = new Conference();
+        Date time = new Date();
+        
+        deadlineConference.setDeadline(time);
+        time.setTime(time.getTime() - 1);
+        assertTrue(deadlineConference.isBeforeSubmissionDeadline(time));
+    }
+    
+    /**
+     * Testing deadline business rule.
+     * @author Zachary Chandler
+     */
+    @Test
+    public void testIsBeforeSubmissionDeadlineJustAfterSubmissionDeadline() {
+        Conference deadlineConference = new Conference();
+        Date time = new Date();
+        
+        deadlineConference.setDeadline(time);
+        time.setTime(time.getTime());
+        assertFalse(deadlineConference.isBeforeSubmissionDeadline(time));
+    }
+    
+    /**
+     * Testing deadline business rule.
+     * @author Zachary Chandler
+     */
+    @Test
+    public void testIsBeforeSubmissionDeadlineAfterSubmissionDeadline() {
+        Conference deadlineConference = new Conference();
+        Date time = new Date();
+        
+        deadlineConference.setDeadline(time);
+        time.setTime(time.getTime() + (24 * 60 * 60 * 1000));
+        assertFalse(deadlineConference.isBeforeSubmissionDeadline(time));
+    }
 }
