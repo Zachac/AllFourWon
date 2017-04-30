@@ -7,6 +7,7 @@ public class Reviewer extends AbstractRole {
 
 	public static int REVIEW_LIMIT = 5;
 	private List<Paper> reviewedPapers;
+	private List<Paper> papersToBeReviewed;
 	private int numberOfReviews;
 
 	/**
@@ -17,6 +18,7 @@ public class Reviewer extends AbstractRole {
 	public Reviewer(String user) {
        super(user);
        reviewedPapers = new ArrayList<>();
+       papersToBeReviewed = new ArrayList<>();
        numberOfReviews = 0;
     }
 
@@ -26,8 +28,11 @@ public class Reviewer extends AbstractRole {
 	 * @return true if assignable, false otherwise.
 	 */
 	public boolean assign(Paper p) {
-		numberOfReviews++;
-		return false;
+		if (!isAtPaperLimit()) {
+			numberOfReviews++;
+			papersToBeReviewed.add(p);
+		}
+		return !isAtPaperLimit();
 	}
 
 	/**
@@ -36,13 +41,12 @@ public class Reviewer extends AbstractRole {
 	 */
 	public boolean isAtPaperLimit() {
 		return numberOfReviews >= REVIEW_LIMIT;
-
 	}
 
 	public int getNumberOfReviews() {
 		//also needed this
 		return numberOfReviews;
-//>>>>>>> 1476df63a76ec79908809f068805d86d74f13292
+		//>>>>>>> 1476df63a76ec79908809f068805d86d74f13292
 	}
 
 }
