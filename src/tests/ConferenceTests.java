@@ -18,6 +18,7 @@ public class ConferenceTests {
 	
 	/**
 	 * A test for the conference constructor.
+	 * @author Zachary Chandler
 	 */
 	@Test
 	public void testConferenceConstrutor() {
@@ -29,6 +30,7 @@ public class ConferenceTests {
 
 	/**
 	 * A test for submitting a paper with only one Author.
+     * @author Zachary Chandler
 	 */
 	@Test
 	public void testPaperSubmissionOneAuthor() {
@@ -40,7 +42,7 @@ public class ConferenceTests {
 		
 		List<Author> authors = new LinkedList<Author>();
 		authors.add(zach);
-
+		
 		Paper justZach1 = new Paper(null, authors, "Just Zach's Paper");
 		assertTrue(simpleConference.submitPaper(justZach1));
 		assertTrue(simpleConference.getPapers(zach).size() == 1);
@@ -68,6 +70,7 @@ public class ConferenceTests {
 	
 	/**
 	 * A test for submitting a paper with more than one Author.
+     * @author Zachary Chandler
 	 */
 	@Test
 	public void testPaperSubmissionMoreThanOneAuthor() {
@@ -203,7 +206,7 @@ public class ConferenceTests {
 		Paper mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
 		//I don't know the author add paper method yet since it was empty
 		//assuming it will be like this -> testAuthor.addPaper(mockPaperTest);
-		assertTrue(conferencePaperLimit.isAuthorPaperLimit(testAuthor));
+		assertTrue(conferencePaperLimit.isAuthorAtPaperLimit(testAuthor));
 		//Do I need to make unique parameters for the Papers?
 		Paper fiveAuthors1 = new Paper(null, authors, "Just a Paper");
 		Paper fiveAuthors2 = new Paper(null, authors, "Just a Paper");
@@ -212,7 +215,7 @@ public class ConferenceTests {
 		Paper fiveAuthors5 = new Paper(null, authors, "Just a Paper");
 		Paper fiveAuthors6 = new Paper(null, authors, "Just a Paper");
 		//This should return false
-		assertFalse(conferencePaperLimit.isAuthorPaperLimit(testAuthor));
+		assertFalse(conferencePaperLimit.isAuthorAtPaperLimit(testAuthor));
 	}
 	/**
 	 * Tests if roles are correctly identified in the conference.

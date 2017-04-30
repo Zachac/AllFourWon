@@ -6,23 +6,45 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+/**
+ * This class is responsible for handling all the general
+ * information in a conference. Which includes:
+ * 		- Papers submitted
+ * 		- roles and privileges
+ * 		- the submission deadline
+ * 		
+ * @author Zachary Chandler
+ */
 public class Conference implements Serializable {
 
-	/**
-	 * 
-	 */
+	/** Eclipse generated SVUID. */
 	private static final long serialVersionUID = 3239987612704413287L;
 	
+	/** Max number of papers an author can publish. */
 	private static final int AUTHOR_MAX_PAPERS = 5;
 
+	/** The Papers submitted to the conference. */
 	private List<Paper> papers;
+	
+	/** A map of authors to a list of their papers. */
     private TreeMap<Author, List<Paper>> authorsToPapers;
+    
+    /** A map of user names to their Author role. */
     private TreeMap<String, Author> authors;
+    
+    /** A map of user names to their SubProgramChair role. */
     private TreeMap<String, SubProgramChair> subProgramChairs;
+    
+    /** A map of user names to their Reviewer role. */
     private TreeMap<String, Reviewer> reviewers;
 	
-	private Date deadline;
+    /** The submission deadline for the conference. */
+	private Date submissionDeadline;
 	
+	/**
+	 * Creates a new empty conference.
+	 * @author Zachary Chandler
+	 */
 	public Conference() {
 	    authorsToPapers = new TreeMap<>();
 	    papers = new LinkedList<>();
@@ -30,36 +52,25 @@ public class Conference implements Serializable {
         subProgramChairs = new TreeMap<>();
         reviewers = new TreeMap<>();
 	    
-	    deadline = null;
+	    submissionDeadline = null;
 	}
-	
-	
 	
 	/**
 	 * Adds a paper to the conference
+	 * @author Zachary Chandler
+	 * 
 	 * @param p the paper
 	 * @return if it successfully submits the paper
 	 */
 	public boolean submitPaper(Paper p) {
-	    if (isPastSubmissionDeadline()) {
+	    if (!isBeforeSubmissionDeadline(p.getSubmissionDate())) {
 	        return false;
 	    }
 	    
-	    List<Author> authorsOfPaper = new LinkedList<>();
-	    
-	    for (String s : p.getAuthors()) {
-	        Author a = authors.get(s);
-	        
-	        if (a == null) {
-	            a = new Author(s);
-	            authors.put(s, a);
-	        }
-
-            authorsOfPaper.add(a);
-	    }
+	    List<Author> authorsOfPaper = p.getAuthors();
 	    
 	    for (Author a : authorsOfPaper) {
-	        if (isAuthorPaperLimit(a)) {
+	        if (isAuthorAtPaperLimit(a)) {
 	            return false;
 	        }
 	    }
@@ -75,11 +86,13 @@ public class Conference implements Serializable {
 	
 	/**
 	 * Removes a paper from the conference.
+	 * @author Zachary Chandler
+	 * 
 	 * @param p the paper
 	 * @return if it successfully removes the paper
 	 */
 	public boolean removePaper(Paper p) {
-	    if (isPastSubmissionDeadline()) {
+	    if (isBeforeSubmissionDeadline(new Date())) {
 	        return false;
 	    }
 	    
@@ -87,31 +100,13 @@ public class Conference implements Serializable {
 	        return false;
 	    }
 	    
-	    
-	    List<Author> authorsOfPaper = new LinkedList<>();
-        
-        for (String s : p.getAuthors()) {
-            Author a = authors.get(s);
-            
-            if (a == null) {
-                throw new NullPointerException("Unfound author, this shouldn't be possible.");
-            }
-
-            authorsOfPaper.add(a);
-        }
-	    
+	    List<Author> authorsOfPaper = p.getAuthors();
 
         for (Author a : authorsOfPaper) {
             List<Paper> currentPapers = authorsToPapers.get(a);
             
             
             currentPapers.remove(p);
-            
-            if (currentPapers.isEmpty()) {
-                authors.remove(a.getUser());
-                authorsToPapers.remove(a);
-            }
-            
         }
         
         papers.remove(p);
@@ -121,30 +116,38 @@ public class Conference implements Serializable {
 	
 	/**
 	 * Gets the papers an author submitted.
+	 * @author Zachary Chandler
+	 * 
 	 * @return a list of papers
 	 */
 	public List<Paper> getPapers(Author a) {
-		return authorsToPapers.get(a);
+		return new LinkedList<Paper>(authorsToPapers.get(a));
 	}
 	
 	/**
 	 * Returns the deadline for paper submission in the conference.
+	 * @author Zachary Chandler
+	 * 
 	 * @return the date of the deadline or null if no deadline is specified
 	 */
 	public Date getDeadline() {
-		return deadline == null ? null : (Date) deadline.clone();
+		return submissionDeadline == null ? null : (Date) submissionDeadline.clone();
 	}
 	
 	/**
 	 * Creates a deadline for paper submission in a conference.
+	 * @author Zachary Chandler
+	 * 
 	 * @param d the date of the deadline
 	 */
 	public void setDeadline(Date d) {
-		deadline = (Date) d.clone();
+		submissionDeadline = (Date) d.clone();
 	}
 	
 	/**
 	 * Returns the roles for a given user.
+	 * @author Zachary Chandler
+	 * 
 	 * @param user self explanatory
 	 * @return the list of roles for the user
 	 */
@@ -171,6 +174,8 @@ public class Conference implements Serializable {
 	
 	/**
 	 * Adds a reviewer to the conference.
+	 * @author Zachary Chandler
+	 * 
 	 * @param user the user being made a reviewer
 	 */
 	public void addReviewer(String user) {
@@ -179,6 +184,8 @@ public class Conference implements Serializable {
 	
 	/**
 	 * Returns a list of reviewers for a given conference.
+	 * @author Zachary Chandler
+	 * 
 	 * @return list of reviewers
 	 */
 	public List<Reviewer> getReviewers() {
@@ -194,6 +201,8 @@ public class Conference implements Serializable {
 
     /**
      * Adds a subprogram chair to the conference.
+	 * @author Zachary Chandler
+	 * 
      * @param user the user being made a subprogram chair
      */
     public void addSubprogramChair(String user) {
@@ -203,7 +212,35 @@ public class Conference implements Serializable {
     }
     
     /**
+     * Adds an Author to the conference.
+	 * @author Zachary Chandler
+	 * 
+     * @param user the user being made a subprogram chair
+     */
+    public void addAuthor(String user) {
+        if (!authors.containsKey(user)) {
+        	Author a = new Author(user);
+            authors.put(user, a);
+            authorsToPapers.put(a, new LinkedList<Paper>());
+        }
+    }
+    
+    /**
+     * Gets an Author in the conference, or null if 
+     * the given user isn't an author.
+     * @author Zachary Chandler
+     * 
+     * @param user the user name.
+     * @return an Author object or null.
+     */
+    public Author getAuthor(String user) {
+        return authors.get(user);
+    }
+    
+    /**
      * Removes a subprogram chair from the conference.
+	 * @author Zachary Chandler
+	 * 
      * @param user the user being removed as a subprogram chair
      */
     public void removeSubprogramChair(String user) {
@@ -212,18 +249,22 @@ public class Conference implements Serializable {
 	
 	/**
 	 * Checks if the current date is past the deadline date.
+	 * @author Zachary Chandler
+	 * 
 	 * @return if papers are submittable
 	 */
-	public boolean isPastSubmissionDeadline() {
-		return new Date().before(deadline);
+	public boolean isBeforeSubmissionDeadline(Date time) {
+		return time.before(submissionDeadline);
 	}
 	
 	/**
 	 * Checks if the author has reached the paper submission limit.
+	 * @author Zachary Chandler
+	 * 
 	 * @param a the author
 	 * @return if the author is able to submit more papers
 	 */
-	public boolean isAuthorPaperLimit(Author a) {
-		return authorsToPapers.get(a).size() <= AUTHOR_MAX_PAPERS;
+	public boolean isAuthorAtPaperLimit(Author a) {
+		return authorsToPapers.get(a).size() >= AUTHOR_MAX_PAPERS;
 	}
 }
