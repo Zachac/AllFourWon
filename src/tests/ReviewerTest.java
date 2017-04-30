@@ -65,6 +65,8 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		//assign 1 paper and test
 		reviewerTestObject.assign(paperObjectToCheckAssignment);
+		
+		//this test causes a null pointer exception
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
 		
 	}

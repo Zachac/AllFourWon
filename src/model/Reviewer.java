@@ -54,7 +54,6 @@ public class Reviewer extends AbstractRole {
 	public boolean assign(Paper p) {
 		boolean authorIsDifferent = true;
 		List<Author> authorList = p.getAuthors();
-		
 		//testing if the author name is
 		for(int i = 0; i < authorList.size(); i++) {
 			if(authorList.get(i).getUser().equals(this.getUser())) {
@@ -65,6 +64,7 @@ public class Reviewer extends AbstractRole {
 			numberOfReviews++;
 			papersToBeReviewed.add(p);
 		}
+		
 		return authorIsDifferent && !isAtPaperLimit();
 	}
 
