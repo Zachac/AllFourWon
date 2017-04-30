@@ -13,6 +13,7 @@ import org.junit.Test;
 import model.Author;
 import model.Conference;
 import model.Paper;
+import model.Reviewer;
 
 public class ConferenceTests {
 	
@@ -254,5 +255,13 @@ public class ConferenceTests {
 	@Test
 	public void testAddGetReviewer() {
 		Conference testConference = new Conference();
+		testConference.addReviewer("johndoe");
+		testConference.addReviewer("janedoe");
+		testConference.addReviewer("johnnyMcJohnnyface");
+		
+		List<Reviewer> reviewerList = testConference.getReviewers();
+		assertEquals(reviewerList.get(0).getUser(), "johndoe");
+		assertEquals(reviewerList.get(1).getUser(), "janedoe");
+		assertEquals(reviewerList.get(2).getUser(), "johnnyMcJohnnyface");
 	}
 }
