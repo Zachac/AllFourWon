@@ -246,4 +246,13 @@ public class ConferenceTests {
 		
 		
 	}
+	
+	/**
+	 * Testing the addReviewer method and the getReviewer method in Conference class.
+	 * @author Dmitriy Bliznyuk
+	 */
+	@Test
+	public void testAddGetReviewer() {
+		Conference testConference = new Conference();
+	}
 }
