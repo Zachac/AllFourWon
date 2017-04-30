@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Before;
@@ -57,5 +58,12 @@ public class PaperTest {
 	@Test
 	public void getDocumentPathTest() {
 		assertEquals(paperTestObject.getDocumentPath(), "filePathOfPaper");
+	}
+	
+	@Test
+	public void getSubmissionDateTest() {
+		Date testDate = new Date();
+		//created date should be after this new testDate that was created
+		assertTrue(paperTestObject.getSubmissionDate().before(testDate));
 	}
 }
