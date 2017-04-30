@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Reviewer extends AbstractRole {
 	
+	public static int REVIEW_LIMIT = 5;
 	private List<Paper> reviewedPapers;
 	private int numberOfReviews;
 	
@@ -34,7 +35,7 @@ public class Reviewer extends AbstractRole {
 	 * @return true if at paper limit, false otherwise.
 	 */
 	public boolean isAtPaperLimit() {
-		return false;
+		return numberOfReviews >= REVIEW_LIMIT;
 	}
 
 }
