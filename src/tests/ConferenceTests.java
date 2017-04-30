@@ -181,5 +181,66 @@ public class ConferenceTests {
 		assertEquals(conferenceToTestGetPapers.getPapers(testAuthor), paperToTestGetPapers);
 		
 	}
+	/**
+	 * Tests if boolean variable for the submission limit is working.
+	 * @author Kevin Nguyen
+	 */
+	@Test
+	public void testAuthorPaperLimit() {
+		Conference conferencePaperLimit = new Conference();
+		Author testAuthor = new Author("Sam");
+		//Should the add author method take in the Author class?
+		/* I think the parameter for addAuthor should be Author rather than strings
+		 * Since (atleast for this test) I can't call the author paper limit 
+		 * method. It kinda makes it long 
+		 */
+		conferencePaperLimit.addAuthor("Sam"); 
+		List<Author> authors = new LinkedList<Author>();
+		authors.add(testAuthor);
+		Author sam = conferencePaperLimit.getAuthor("sam");
 
+		Path filePathOfPaper = Paths.get("temp/file/path");
+		Paper mockPaperTest = new Paper(filePathOfPaper, authors, "AwesomePaper");
+		//I don't know the author add paper method yet since it was empty
+		//assuming it will be like this -> testAuthor.addPaper(mockPaperTest);
+		assertTrue(conferencePaperLimit.isAuthorPaperLimit(testAuthor));
+		//Do I need to make unique parameters for the Papers?
+		Paper fiveAuthors1 = new Paper(null, authors, "Just a Paper");
+		Paper fiveAuthors2 = new Paper(null, authors, "Just a Paper");
+		Paper fiveAuthors3 = new Paper(null, authors, "Just a Paper");
+		Paper fiveAuthors4 = new Paper(null, authors, "Just a Paper");
+		Paper fiveAuthors5 = new Paper(null, authors, "Just a Paper");
+		Paper fiveAuthors6 = new Paper(null, authors, "Just a Paper");
+		//This should return false
+		assertFalse(conferencePaperLimit.isAuthorPaperLimit(testAuthor));
+	}
+	/**
+	 * Tests if roles are correctly identified in the conference.
+	 * Not sure if testing right since its a tree map I presume.
+	 * @author Kevin Nguyen
+	 */
+	@Test
+	public void testGetRoles() {
+		Conference conRole = new Conference();
+		conRole.addAuthor("Ian"); 
+		Author ian = new Author("Ian");
+		conRole.addAuthor("Jury");
+		Author jury = conRole.getAuthor("Jury");
+		conRole.addReviewer("Zach");
+		conRole.addReviewer("Chandler");
+		conRole.addSubprogramChair("Dimitry");
+		conRole.addSubprogramChair("Bliznyuk");
+		//I think this failed because returned memory address.
+		assertEquals(conRole.getRoles("Ian"), "Author");
+		assertEquals(conRole.getAuthor("Jury"), "Author");
+		assertEquals(conRole.getRoles("Zach"), "Reviewer");
+		List<Author> authors = new LinkedList<Author>();
+		authors.add(jury);
+		assertEquals(conRole.getRoles(authors.get(0).toString()), "Author");
+		assertEquals(conRole.getRoles("Bliznyuk"), "SubProgramChair");
+		assertEquals(conRole.getRoles("Zach"), "Reviewer");
+
+		
+		
+	}
 }
