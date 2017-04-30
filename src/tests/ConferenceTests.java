@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -291,7 +292,41 @@ public class ConferenceTests {
 	 * author submits the allowed amount of papers.
 	 * @author Dmitriy Bliznyuk
 	 */
+	@Test
 	public void testIsAuthorAtPaperLimit() {
+		Conference testConference = new Conference();
 		
+		Path filePathOfPaper = Paths.get("temp/file/path");
+		List<Author> listOfAuthorsOfPaper = new ArrayList<>();
+		Author testAuthor = new Author("James");
+		listOfAuthorsOfPaper.add(testAuthor);
+		String firstPaper = "ExampleOne";
+		String secondPaper = "ExampleTwo";
+		String thirdPaper = "ExampleThree";
+		String fourthPaper = "ExampleFour";
+		String fifthPaper = "ExampleFive";
+		
+		Paper paperTestOne = new Paper(filePathOfPaper, listOfAuthorsOfPaper, firstPaper);
+		Paper paperTestTwo = new Paper(filePathOfPaper, listOfAuthorsOfPaper, secondPaper);
+		Paper paperTestThree = new Paper(filePathOfPaper, listOfAuthorsOfPaper, thirdPaper);
+		Paper paperTestFour = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fourthPaper);
+		Paper paperTestFive = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fifthPaper);
+		
+		testConference.addAuthor("James");
+		//author hasn't submitted a single paper (should return false)
+		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
+		
+		testConference.submitPaper(paperTestOne);
+		testConference.submitPaper(paperTestTwo);
+		testConference.submitPaper(paperTestThree);
+		testConference.submitPaper(paperTestFour);
+		
+		//author has submitted 4 papers (should return false)
+		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
+		
+		testConference.submitPaper(paperTestFive);
+		
+		//author has submitted 5 papers (should return true)
+		assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
 	}
 }
