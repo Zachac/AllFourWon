@@ -382,8 +382,10 @@ public class ConferenceTests {
         
         Path filePathOfPaper = Paths.get("temp/file/path");
         List<Author> listOfAuthorsOfPaper = new ArrayList<>();
-        Author testAuthor = new Author("James");
+        testConference.addAuthor("James");
+        Author testAuthor = testConference.getAuthor("James");
         listOfAuthorsOfPaper.add(testAuthor);
+        
         String firstPaper = "ExampleOne";
         String secondPaper = "ExampleTwo";
         String thirdPaper = "ExampleThree";
@@ -396,7 +398,6 @@ public class ConferenceTests {
         Paper paperTestFour = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fourthPaper);
         Paper paperTestFive = new Paper(filePathOfPaper, listOfAuthorsOfPaper, fifthPaper);
         
-        testConference.addAuthor("James");
         //author hasn't submitted a single paper (should return false)
         assertFalse(testConference.isAuthorAtPaperLimit(testAuthor));
         
