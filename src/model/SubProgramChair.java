@@ -18,7 +18,7 @@ public final class SubProgramChair extends AbstractRole implements Cloneable {
     private static final long serialVersionUID = 3678435490225778582L;
     
     /** List of assigned papers to subprogram chair.*/
-    private List<Paper> assignedPapers = new ArrayList<>();
+    private List<Paper> assignedPapers;
     
 
     /**
@@ -27,13 +27,16 @@ public final class SubProgramChair extends AbstractRole implements Cloneable {
      */
     public SubProgramChair(String user) {
         super(user);
+        assignedPapers = new ArrayList<>();
     }
     
     /**
      * Assigns a paper to the subprogram chair to manage.
      */
     public void addPaper(Paper thePaper) {
-        assignedPapers.add(thePaper);
+        if (!assignedPapers.contains(thePaper)) {
+            assignedPapers.add(thePaper);            
+        }
     }
     
     /**

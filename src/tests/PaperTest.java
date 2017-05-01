@@ -46,8 +46,12 @@ public class PaperTest {
 	@Test
 	public void getAuthorsTest() {
 		List<Author> returnedAuthors = paperTestObject.getAuthors();
-		assertEquals(returnedAuthors.get(0), "James");
-		assertEquals(returnedAuthors.get(0), "John");
+		
+		assertTrue(returnedAuthors.size() == 2);
+		
+		for (Author a : returnedAuthors) {
+		    assertTrue(a.getUser().equals("James") || a.getUser().equals("John"));
+		}
 	}
 
 	@Test
@@ -57,13 +61,15 @@ public class PaperTest {
 	
 	@Test
 	public void getDocumentPathTest() {
-		assertEquals(paperTestObject.getDocumentPath(), "filePathOfPaper");
+		assertEquals(paperTestObject.getDocumentPath(), filePathOfPaper);
 	}
 	
 	@Test
 	public void getSubmissionDateTest() {
 		Date testDate = new Date();
 		//created date should be after this new testDate that was created
+		testDate.setTime(testDate.getTime() + 1);//computers are way too fast though, not even a ms has passed -zach
+		
 		assertTrue(paperTestObject.getSubmissionDate().before(testDate));
 	}
 }

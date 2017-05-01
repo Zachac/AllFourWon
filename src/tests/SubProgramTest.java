@@ -70,12 +70,28 @@ public class SubProgramTest {
 	@Test
 	public void getPaperTest() throws CloneNotSupportedException {
 		//this thorws a null pointer for some reason.
+        testSub = new SubProgramChair("username");
 		testSub.addPaper(testPaper);
-		assertEquals(testSub.getPapers(), "AwesomePaper");
+		
+		List<Paper> papers = testSub.getPapers();
+		assertTrue(papers.size() == 1);
+		assertEquals(testSub.getPapers().get(0).getTitle(), testPaper.getTitle());
+		
 		//forgot how to assert equals all the strings
 		testSub.addPaper(testPaper);
 		testSub.addPaper(testPaper);
-		assertEquals(testSub.getPapers(), "AwesomePaper/nAwesomePaper/nAwesomePaper");
+		
+		papers = testSub.getPapers();
+		assertTrue(papers.size() == 1);
+		
+		Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name");
+		testSub.addPaper(testPaper2);
+		papers = testSub.getPapers();
+        assertTrue(papers.size() == 2);
+		        
+        for (Paper p : papers) {
+            assertTrue(p == testPaper || p == testPaper2);
+        }
 
 	}
 	/**
@@ -85,12 +101,26 @@ public class SubProgramTest {
 	@Test
 	public void AddPaperToSubTest() throws CloneNotSupportedException {
 		//This is throwing a null paper for some reason.
+	    testSub = new SubProgramChair("username");
 		testSub.addPaper(testPaper);
+		
 		//Using the get method to verify the adding worked.
-		assertEquals(testSub.getPapers(),"AwesomePaper");
+		List<Paper> papers = testSub.getPapers();
+		assertTrue(papers.size() == 1);
+		assertEquals(papers.get(0), testPaper);
+
+        Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name");
+        
 		//Add multiple papers
-		testSub.addPaper(testPaper);
-		testSub.addPaper(testPaper);
+		testSub.addPaper(testPaper2);
+
+        papers = testSub.getPapers();
+        assertTrue(papers.size() == 2);
+        
+        
+        for (Paper p : papers) {
+            assertTrue(p == testPaper || p == testPaper2);
+        }
 	}
 	
 }
