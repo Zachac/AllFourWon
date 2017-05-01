@@ -51,27 +51,40 @@ public class ReviewerTest {
 		listOfAuthorsOfPaper = new ArrayList<>();
 		paperObjectToFillReviewerLimit = 
 				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
-		
 		paperObjectToCheckAssignment =
 				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 		
 	}
-
+	/**
+	 * Tests if the object user is the name of the author.
+	 */
 	@Test
 	public void testGetUser() {
 		assertEquals(reviewerTestObject.getUser(), nameOfAnAuthor);
 	}
-
+	/**
+	 * Doesn't assign any paper to test if review number is valid
+	 */
 	@Test
-	public void testAssign() {
+	public void testUnassigned() {
 		//check if empty
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
+		
+	}
+	/**
+	 * Assigns one paper and checks if assignment worked properly.
+	 */
+	@Test
+	public void testAssigned() {		
 		//assign 1 paper and test
 		reviewerTestObject.assign(paperObjectToCheckAssignment);
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
 		
 	}
 
+	/**
+	 * Tests if a paper limit for reviewer is valid when under limit.
+	 */
 	@Test
 	public void testIsAtPaperLimit() {
 		//assign 7 papers, make sure limit isn't reached
@@ -79,11 +92,15 @@ public class ReviewerTest {
 			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
-		
-		//assign one more paper - should now be at limit (8 papers)
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		assertTrue(reviewerTestObject.isAtPaperLimit());
-		
 	}
-
+	/**
+	 * Tests if a paper limit for reviewer is valid when over limit.
+	 */
+	public void testIsOverPaperLimit() {
+		//assign 7 papers, make sure limit isn't reached
+		for (int limit = 0; limit < paperLimit; limit++) {
+			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		}
+		assertTrue(reviewerTestObject.isAtPaperLimit());
+	}
 }
