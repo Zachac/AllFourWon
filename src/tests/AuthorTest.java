@@ -10,6 +10,7 @@ public class AuthorTest {
 
 	/**
 	 * Test author constructor.
+	 * @author Brian
 	 */
 	@Test
 	public void testAuthorConstructor() {
