@@ -41,6 +41,9 @@ public class ReviewerTest {
 	/** Title of paper for paper object*/
 	private String titleOfPaper = "Test Title";
 	
+	/** limit for for paper assignment */
+	private int paperLimit = 8;
+	
 	@Before
 	public void setup() {
 		reviewerTestObject = new Reviewer(nameOfAnAuthor);
@@ -71,15 +74,10 @@ public class ReviewerTest {
 
 	@Test
 	public void testIsAtPaperLimit() {
-
 		//assign 7 papers, make sure limit isn't reached
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
-		reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		for (int limit = 0; limit < paperLimit - 1; limit++) {
+			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 		
 		//assign one more paper - should now be at limit (8 papers)
