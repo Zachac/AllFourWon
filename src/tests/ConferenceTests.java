@@ -37,7 +37,7 @@ public class ConferenceTests {
      * @author Zachary Chandler
      */
     @Test
-    public void testPaperSubmissionSamePaper() { 
+    public void testSubmitPaper_SamePaperMoreThanOnce_ReturnTrueWithoutAffect() { 
         Conference simpleConference = new Conference();
         simpleConference.setDeadline(new Date(new Date().getTime() + 5000));
         simpleConference.addAuthor("zachac");
@@ -55,13 +55,13 @@ public class ConferenceTests {
         assertTrue(simpleConference.submitPaper(justZach1));
         assertTrue(simpleConference.getPapers(zach).size() == 1);
     }
-
+    
     /**
      * A test for submitting a paper with only one Author.
      * @author Zachary Chandler
      */
     @Test
-    public void testPaperSubmissionOneAuthor() {
+    public void testSubmitPaper_OneAuthorSubmitSixPapers_FailsAtSixthSubmition() {
 		Conference simpleConference = new Conference();
 		simpleConference.setDeadline(new Date(new Date().getTime() + 5000));
 		simpleConference.addAuthor("zachac");
@@ -71,29 +71,12 @@ public class ConferenceTests {
 		List<Author> authors = new LinkedList<Author>();
 		authors.add(zach);
 		
-		Paper justZach1 = new Paper(null, authors, "Just Zach's Paper");
-		assertTrue(simpleConference.submitPaper(justZach1));
-		assertTrue(simpleConference.getPapers(zach).size() == 1);
-
-		Paper justZach2 = new Paper(null, authors, "Just Zach's Paper");
-		assertTrue(simpleConference.submitPaper(justZach2));
-		assertTrue(simpleConference.getPapers(zach).size() == 2);
-
-		Paper justZach3 = new Paper(null, authors, "Just Zach's Paper");
-		assertTrue(simpleConference.submitPaper(justZach3));
-		assertTrue(simpleConference.getPapers(zach).size() == 3);
-
-		Paper justZach4 = new Paper(null, authors, "Just Zach's Paper");
-		assertTrue(simpleConference.submitPaper(justZach4));
-		assertTrue(simpleConference.getPapers(zach).size() == 4);
-
-		Paper justZach5 = new Paper(null, authors, "Just Zach's Paper");
-		assertTrue(simpleConference.submitPaper(justZach5));
-		assertTrue(simpleConference.getPapers(zach).size() == 5);
-		
-		Paper justZach6 = new Paper(null, authors, "Just Zach's Paper");
-		assertFalse(simpleConference.submitPaper(justZach6));
-		assertTrue(simpleConference.getPapers(zach).size() == 5);
+        assertTrue(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper")));
+        assertTrue(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper")));
+        assertTrue(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper")));
+        assertTrue(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper")));
+        assertTrue(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper")));  //5
+        assertFalse(simpleConference.submitPaper(new Paper(null, authors, "Just Zach's Paper"))); //6
 	}
 	
 	/**
@@ -101,7 +84,7 @@ public class ConferenceTests {
      * @author Zachary Chandler
 	 */
 	@Test
-	public void testPaperSubmissionMoreThanOneAuthor() {
+	public void testSubmitPaper_MoreThanOneAuthorSubmitSixPapers_FailsAtSixthSubmition() {
 		Conference simpleConference = new Conference();
 		simpleConference.setDeadline(new Date(new Date().getTime() + 5000));
 		simpleConference.addAuthor("zachac");
