@@ -41,16 +41,21 @@ public class Conference implements Serializable {
     /** The submission deadline for the conference. */
     private Date submissionDeadline;
     
+    /** The name of the conference. */
+    public final String name;
+    
     /**
      * Creates a new empty conference. With no tracked papers, or roles.
      * @author Zachary Chandler
      */
-    public Conference() {
+    public Conference(String name) {
         authorsToPapers = new TreeMap<>();
         papers = new LinkedList<>();
         authors = new TreeMap<>();
         subProgramChairs = new TreeMap<>();
         reviewers = new TreeMap<>();
+        
+        this.name = name;
         
         submissionDeadline = null;
     }

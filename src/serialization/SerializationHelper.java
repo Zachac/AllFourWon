@@ -7,15 +7,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Set;
 
 import model.ConferenceManager;
 
 public class SerializationHelper {
 	private static final String DATA_FOLDER = "data";
 	private static final String CONFERENCE_MANAGER_FILE = "system.ser";
+	private static final String USERS_FILE = "users.ser";
 	
-	private static final Path CONFERENCE_MANAGER_FILE_SAVE = Paths.get(DATA_FOLDER, CONFERENCE_MANAGER_FILE);
+	private static final Path CONFERENCE_MANAGER_FILE_SAVE =
+			Paths.get(DATA_FOLDER, CONFERENCE_MANAGER_FILE);
 	
+	private static final Path USERS_FILE_SAVE =
+			Paths.get(DATA_FOLDER, USERS_FILE);
 
 	public static ConferenceManager loadConferenceManager() {
 		return (ConferenceManager) loadObject(CONFERENCE_MANAGER_FILE_SAVE.toString());
@@ -25,16 +30,25 @@ public class SerializationHelper {
 		saveObject(cm, CONFERENCE_MANAGER_FILE_SAVE.toString());
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static Set<String> loadUsers() {
+		return (Set<String>) loadObject(USERS_FILE_SAVE.toString());
+	}
+
+	public static void saveUsers(Set<String> users) {
+		saveObject(users, USERS_FILE_SAVE.toString());
+	}
+	
 	public static Object loadObject(String fileName) {
 		Object result;
 		
 		try {
 	        FileInputStream fileIn = new FileInputStream(fileName);
 	        ObjectInputStream in = new ObjectInputStream(fileIn);
-	        result = (ConferenceManager) in.readObject();
+	        result = in.readObject();
 	        in.close();
 	        fileIn.close();
-	        System.out.println("Loaded " + fileName);
+	        //System.out.println("Loaded " + fileName);
 	    }catch(IOException i) {
 	    	System.out.println(i.getMessage());
 	    	System.out.println("FAILED to load " + fileName);
@@ -59,7 +73,7 @@ public class SerializationHelper {
 	         out.close();
 	         fileOut.close();
 	         
-	         System.out.println("Saved system to " + fileName);
+	         //System.out.println("Saved system to " + fileName);
 	      } catch(IOException i) {
 	    	  System.out.println(i.getMessage());
 	    	  System.out.println("FAILED to Save system to " + fileName);

@@ -29,7 +29,7 @@ public class ConferenceManager implements Serializable {
 	 * 
 	 * @return if the conference was successfully added.
 	 */
-	boolean addConference(Conference c) throws NullPointerException {
+	public boolean addConference(Conference c) throws NullPointerException {
 	    if (c == null) {
 	        throw new NullPointerException("Cannot add null conferences!");
 	    }
@@ -51,7 +51,7 @@ public class ConferenceManager implements Serializable {
      * @throws NullPointerException if the given conference is null.
 	 * @return if the conference was successfully removed
 	 */
-	boolean removeConference(Conference c) throws NullPointerException {
+	public boolean removeConference(Conference c) throws NullPointerException {
 	    if (c == null) {
             throw new NullPointerException("Cannot remove null conference!");
         }
@@ -63,7 +63,7 @@ public class ConferenceManager implements Serializable {
 	 * Returns the list of conferences.
 	 * @return list of conferences
 	 */
-	List<Conference> getConferences() {
+	public List<Conference> getConferences() {
 		return new ArrayList<Conference>(conferences);
 	}
 	

@@ -1,8 +1,8 @@
 package gui;
 
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.Set;
 
 import model.Conference;
 
@@ -15,26 +15,33 @@ public class UserInfo {
 	/** The current conference. */
 	private Conference currentConference;
 	
+	/** Other users in the system. */
+	private final Set<String> otherUsers;
+	
 	/** The output stream that will be displayed to the user. */
-	public final PrintStream output;
+	public final PrintStream out;
 	
 	/** The input scanner that reads input from the user. */
-	public final Scanner input;
+	public final Scanner in;
 	
 	/** The user name of the user. */
-	public final String username;	
+	public final String username;
 	
 	/**
 	 * Instantiate a UserInfo.
 	 * 
 	 * @param output the output stream to the user.
-	 * @param inStream the input stream to the user.
+	 * @param input the input stream to the user.
 	 * @param username the user name of the user.
+	 * @param otherUsers the user names of everyone else in the system.
 	 */
-	public UserInfo(PrintStream output, InputStream inStream, String username) {
-		this.output = output;
-		this.input = new Scanner(inStream);
+	public UserInfo(PrintStream output, Scanner input, String username,
+			Set<String> otherUsers) {
+		
+		this.out = output;
+		this.in = input;
 		this.username = username;
+		this.otherUsers = otherUsers;
 		
 		this.setCurrentConference(null);
 	}
@@ -51,5 +58,13 @@ public class UserInfo {
 	 */
 	public void setCurrentConference(Conference currentConference) {
 		this.currentConference = currentConference;
+	}
+	
+	/**
+	 * Checks if otherUser is in the system with this user. 
+	 * @param otherUser the user name of the other user.
+	 */
+	public void canSee(String otherUser) {
+		otherUsers.contains(otherUser);
 	}
 }

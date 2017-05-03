@@ -2,9 +2,6 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,11 +52,11 @@ public class ConferenceTests {
 	@Before
 	public void setUp() {
 		
-		emptyConference = new Conference();
+		emptyConference = new Conference(null);
 		
 		deadline = new Date();
 		
-		deadlineConference = new Conference();
+		deadlineConference = new Conference(null);
 		deadlineConference.setDeadline(deadline);
 		
 		before = new Date();
@@ -75,7 +72,7 @@ public class ConferenceTests {
 		after = new Date();
 		after.setTime(after.getTime() + 10000);
 		
-		simpleConference = new Conference();
+		simpleConference = new Conference(null);
 		simpleConference.setDeadline(new Date(new Date().getTime() + DEADLINE));
 		simpleConference.addAuthor("zachac");
 		simpleConference.addAuthor("dimabliz");
@@ -214,7 +211,7 @@ public class ConferenceTests {
      */
     @Test
     public void testGetRoles() {
-        Conference conRole = new Conference();
+        Conference conRole = new Conference(null);
         
         conRole.addAuthor("Ian"); 
         conRole.addReviewer("Ian");
@@ -276,7 +273,7 @@ public class ConferenceTests {
 	 */
 	@Test
 	public void testAddGetReviewer() {
-		Conference testConference = new Conference();
+		Conference testConference = new Conference(null);
 		testConference.addReviewer("johndoe");
 		testConference.addReviewer("janedoe");
 		testConference.addReviewer("johnnyMcJohnnyface");
