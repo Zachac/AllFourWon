@@ -20,6 +20,12 @@ import model.Reviewer;
  * @version 1.0
  */
 public class ReviewerTest {
+	/** limit for for paper assignment */
+	private static final int ASSIGNED_PAPER_LIMIT = 8;
+	
+	/** Used to 'offset' paper limit so lower bound business rule can be checked.*/
+	private static final int ASSIGNED_PAPER_LIMIT_OFFSET = 5;
+	
 	/** Reviewer object to be used as test subject */
 	private Reviewer reviewerTestObject;
 	
@@ -41,8 +47,6 @@ public class ReviewerTest {
 	/** Title of paper for paper object*/
 	private String titleOfPaper = "Test Title";
 	
-	/** limit for for paper assignment */
-	private int paperLimit = 8;
 	
 	@Before
 	public void setup() {
@@ -81,24 +85,38 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
 		
 	}
+	
+	//BUSINESS RULE 2B
+	
+	/**
+	 * Tests if assignment isn't at limit if number of 
+	 * papers assigned is well below the limit.
+	 */
+	public void testIsWellBelowPaperLimit() {
+		for (int limit = 0; 
+				limit < ASSIGNED_PAPER_LIMIT - ASSIGNED_PAPER_LIMIT_OFFSET; limit++) {
+			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		}
+		assertFalse(reviewerTestObject.isAtPaperLimit());
+	}
 
 	/**
-	 * Tests if a paper limit for reviewer is valid when under limit.
+	 * Tests if a paper limit for reviewer is valid when n-1 under limit(n).
 	 */
 	@Test
-	public void testIsAtPaperLimit() {
+	public void testIsOneLessThanPaperLimit() {
 		//assign 7 papers, make sure limit isn't reached
-		for (int limit = 0; limit < paperLimit - 1; limit++) {
+		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT - 1; limit++) {
 			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 	}
 	/**
-	 * Tests if a paper limit for reviewer is valid when over limit.
+	 * Tests if a paper limit for reviewer is valid when at limit.
 	 */
 	public void testIsOverPaperLimit() {
 		//assign 7 papers, make sure limit isn't reached
-		for (int limit = 0; limit < paperLimit; limit++) {
+		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT; limit++) {
 			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
 		}
 		assertTrue(reviewerTestObject.isAtPaperLimit());
