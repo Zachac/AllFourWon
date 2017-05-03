@@ -35,9 +35,6 @@ public class ReviewerTest {
 	/** List of authors for paper object */
 	private List<Author> listOfAuthorsOfPaper;
 	
-	/** Paper object to test reviewer limit */
-	private Paper paperObjectToFillReviewerLimit;
-	
 	/** Paper object to test proper assignment */
 	private Paper paperObjectToCheckAssignment;
 	
@@ -47,18 +44,19 @@ public class ReviewerTest {
 	/** Title of paper for paper object*/
 	private String titleOfPaper = "Test Title";
 	
-	
+	/**
+	 * Sets up each test.
+	 */
 	@Before
 	public void setup() {
 		reviewerTestObject = new Reviewer(nameOfAnAuthor);
 		filePathOfPaper = Paths.get("temp/file/path");
 		listOfAuthorsOfPaper = new ArrayList<>();
-		paperObjectToFillReviewerLimit = 
-				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 		paperObjectToCheckAssignment =
 				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 		
 	}
+	
 	/**
 	 * Tests if the object user is the name of the author.
 	 */
@@ -66,6 +64,7 @@ public class ReviewerTest {
 	public void testGetUser() {
 		assertEquals(reviewerTestObject.getUser(), nameOfAnAuthor);
 	}
+	
 	/**
 	 * Doesn't assign any paper to test if review number is valid
 	 */
@@ -75,6 +74,7 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		
 	}
+	
 	/**
 	 * Assigns one paper and checks if assignment worked properly.
 	 */
@@ -86,7 +86,7 @@ public class ReviewerTest {
 		
 	}
 	
-	//BUSINESS RULE 2B
+	//BUSINESS RULE 2B. Tested over the next 3 methods.
 	
 	/**
 	 * Tests if assignment isn't at limit if number of 
@@ -113,6 +113,7 @@ public class ReviewerTest {
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 	}
+	
 	/**
 	 * Tests if a paper limit for reviewer is valid when at limit.
 	 */
