@@ -95,7 +95,9 @@ public class ReviewerTest {
 	public void testIsWellBelowPaperLimit() {
 		for (int limit = 0; 
 				limit < ASSIGNED_PAPER_LIMIT - ASSIGNED_PAPER_LIMIT_OFFSET; limit++) {
-			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+			//note the new Paper object. This was added to make sure that unique instances were used
+			//instead of the same object n times. (same for next 2 methods)
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 	}
@@ -107,7 +109,7 @@ public class ReviewerTest {
 	public void testIsOneLessThanPaperLimit() {
 		//assign 7 papers, make sure limit isn't reached
 		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT - 1; limit++) {
-			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 	}
@@ -115,9 +117,9 @@ public class ReviewerTest {
 	 * Tests if a paper limit for reviewer is valid when at limit.
 	 */
 	public void testIsOverPaperLimit() {
-		//assign 7 papers, make sure limit isn't reached
+		//assign 8 papers, make sure limit is reached
 		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT; limit++) {
-			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
 		}
 		assertTrue(reviewerTestObject.isAtPaperLimit());
 	}
