@@ -20,6 +20,12 @@ import model.Reviewer;
  * @version 1.0
  */
 public class ReviewerTest {
+	/** limit for for paper assignment */
+	private static final int ASSIGNED_PAPER_LIMIT = 8;
+	
+	/** Used to 'offset' paper limit so lower bound business rule can be checked.*/
+	private static final int ASSIGNED_PAPER_LIMIT_OFFSET = 5;
+	
 	/** Reviewer object to be used as test subject */
 	private Reviewer reviewerTestObject;
 	
@@ -28,9 +34,6 @@ public class ReviewerTest {
 	
 	/** List of authors for paper object */
 	private List<Author> listOfAuthorsOfPaper;
-	
-	/** Paper object to test reviewer limit */
-	private Paper paperObjectToFillReviewerLimit;
 	
 	/** Paper object to test proper assignment */
 	private Paper paperObjectToCheckAssignment;
@@ -41,20 +44,19 @@ public class ReviewerTest {
 	/** Title of paper for paper object*/
 	private String titleOfPaper = "Test Title";
 	
-	/** limit for for paper assignment */
-	private int paperLimit = 8;
-	
+	/**
+	 * Sets up each test.
+	 */
 	@Before
 	public void setup() {
 		reviewerTestObject = new Reviewer(nameOfAnAuthor);
 		filePathOfPaper = Paths.get("temp/file/path");
 		listOfAuthorsOfPaper = new ArrayList<>();
-		paperObjectToFillReviewerLimit = 
-				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 		paperObjectToCheckAssignment =
 				new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
 		
 	}
+	
 	/**
 	 * Tests if the object user is the name of the author.
 	 */
@@ -62,6 +64,7 @@ public class ReviewerTest {
 	public void testGetUser() {
 		assertEquals(reviewerTestObject.getUser(), nameOfAnAuthor);
 	}
+	
 	/**
 	 * Doesn't assign any paper to test if review number is valid
 	 */
@@ -71,6 +74,7 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		
 	}
+	
 	/**
 	 * Assigns one paper and checks if assignment worked properly.
 	 */
@@ -81,25 +85,42 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
 		
 	}
-
+	
+	//BUSINESS RULE 2B. Tested over the next 3 methods.
+	
 	/**
-	 * Tests if a paper limit for reviewer is valid when under limit.
+	 * Tests if assignment isn't at limit if number of 
+	 * papers assigned is well below the limit.
 	 */
-	@Test
-	public void testIsAtPaperLimit() {
-		//assign 7 papers, make sure limit isn't reached
-		for (int limit = 0; limit < paperLimit - 1; limit++) {
-			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+	public void testIsWellBelowPaperLimit() {
+		for (int limit = 0; 
+				limit < ASSIGNED_PAPER_LIMIT - ASSIGNED_PAPER_LIMIT_OFFSET; limit++) {
+			//note the new Paper object. This was added to make sure that unique instances were used
+			//instead of the same object n times. (same for next 2 methods)
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
 		}
 		assertFalse(reviewerTestObject.isAtPaperLimit());
 	}
+
 	/**
-	 * Tests if a paper limit for reviewer is valid when over limit.
+	 * Tests if a paper limit for reviewer is valid when n-1 under limit(n).
+	 */
+	@Test
+	public void testIsOneLessThanPaperLimit() {
+		//assign 7 papers, make sure limit isn't reached
+		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT - 1; limit++) {
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
+		}
+		assertFalse(reviewerTestObject.isAtPaperLimit());
+	}
+	
+	/**
+	 * Tests if a paper limit for reviewer is valid when at limit.
 	 */
 	public void testIsOverPaperLimit() {
-		//assign 7 papers, make sure limit isn't reached
-		for (int limit = 0; limit < paperLimit; limit++) {
-			reviewerTestObject.assign(paperObjectToFillReviewerLimit);
+		//assign 8 papers, make sure limit is reached
+		for (int limit = 0; limit < ASSIGNED_PAPER_LIMIT; limit++) {
+			reviewerTestObject.assign(new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper));
 		}
 		assertTrue(reviewerTestObject.isAtPaperLimit());
 	}
