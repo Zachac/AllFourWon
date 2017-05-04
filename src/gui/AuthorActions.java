@@ -1,15 +1,15 @@
 package gui;
 
 public class AuthorActions {
-	public void submitPaper(UserInfo info) {
-		
+	public static void submitPaper(UserInfo info) {
+		System.out.println("--temporary flag for submitPaper");
 	}
 	
-	public void removePaper(UserInfo info) {
-		
+	public static void removePaper(UserInfo info) {
+        System.out.println("--temporary flag for removePaper");
 	}
 	
-	public void editPaper(UserInfo info) {
-		
+	public static void editPaper(UserInfo info) {
+        System.out.println("--temporary flag for editPaper");
 	}
 }

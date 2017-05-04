@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -82,6 +83,15 @@ public class Reviewer extends AbstractRole {
      */
     public int getNumberOfReviews() {
         return numberOfReviews;
+    }
+
+    /**
+     * Gets the papers assigned to the reviewer that haven't been reviewed.
+     * @author Zachary Chandler
+     * @return a list of papers assigned to the reviewer that haven't been reviewed.
+     */
+    public List<Paper> getPapersToBeReviewed() {
+        return new LinkedList<>(papersToBeReviewed);
     }
 
 }
