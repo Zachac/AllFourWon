@@ -39,7 +39,7 @@ public class ReviewerTest {
 	private Paper paperObjectToCheckAssignment;
 	
 	/** Name of author for paper object*/
-	private String nameOfAnAuthor = "JSmith";
+	private String nameOfThisReviewer = "JSmith";
 	
 	/** Title of paper for paper object*/
 	private String titleOfPaper = "Test Title";
@@ -49,7 +49,7 @@ public class ReviewerTest {
 	 */
 	@Before
 	public void setup() {
-		reviewerTestObject = new Reviewer(nameOfAnAuthor);
+		reviewerTestObject = new Reviewer(nameOfThisReviewer);
 		filePathOfPaper = Paths.get("temp/file/path");
 		listOfAuthorsOfPaper = new ArrayList<>();
 		
@@ -65,7 +65,7 @@ public class ReviewerTest {
 	 */
 	@Test
 	public void testGetUser() {
-		assertEquals(reviewerTestObject.getUser(), nameOfAnAuthor);
+		assertEquals(reviewerTestObject.getUser(), nameOfThisReviewer);
 	}
 	
 	/**
@@ -78,14 +78,43 @@ public class ReviewerTest {
 		
 	}
 	
+	//Business rule 2A - Next three methods
+	
 	/**
 	 * Assigns one paper and checks if assignment worked properly.
 	 */
 	@Test
-	public void testAssigned() {		
+	public void testPaperAssignedIfNotAuthorOrCoAuthor() {		
 		//assign 1 paper and test
 		reviewerTestObject.assign(paperObjectToCheckAssignment);
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 1);
+		
+	}
+	/**
+	 * Attempts to assign a paper to a reviewer that is the author.
+	 * Should not work
+	 */
+	public void testPaperNotAssignedIfReviewerIsAuthor() {
+		List<Author> reviewerIsAuthorInList = new ArrayList<>();
+		reviewerIsAuthorInList.add(new Author(nameOfThisReviewer));
+		Paper reviewerIsAuthorOfPaper = new Paper(filePathOfPaper, reviewerIsAuthorInList, titleOfPaper, null);
+		//assign reviewer to paper they are author of
+		reviewerTestObject.assign(reviewerIsAuthorOfPaper); 
+		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
+		
+	}
+	/**
+	 * Attempts to assign a paper to a reviewer that is the coAuthor.
+	 * Should not work
+	 */
+	public void testPaperNotAssignedIfReviewerIsCoAuthor() {
+		List<Author> reviewerIsAuthorInList = new ArrayList<>();
+		reviewerIsAuthorInList.add(new Author("This is the name of the main author"));
+		reviewerIsAuthorInList.add(new Author(nameOfThisReviewer));
+		Paper reviewerIsAuthorOfPaper = new Paper(filePathOfPaper, reviewerIsAuthorInList, titleOfPaper, null);
+		//assign reviewer to paper they are author of
+		reviewerTestObject.assign(reviewerIsAuthorOfPaper); 
+		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		
 	}
 	

@@ -19,7 +19,7 @@ public class AuthorActions {
 	}
 	
 	/**
-	 * Allows
+	 * Allows logged in user to edit paper if they are the submitter.
 	 * @author Ian Jury
 	 * @param info
 	 */
