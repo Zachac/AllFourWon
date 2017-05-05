@@ -46,7 +46,7 @@ public class SubProgramTest {
 		listOfAuthorsForPaper.add(new Author("Ian"));
 		listOfAuthorsForPaper.add(new Author("Dimitry"));
 		//Creating the paper.
-		testPaper = new Paper(paperFilePath, listOfAuthorsForPaper, "AwesomePaper");
+		testPaper = new Paper(paperFilePath, listOfAuthorsForPaper, "AwesomePaper", listOfAuthorsForPaper.get(0));
 	}
 	
 	@Test
@@ -84,7 +84,7 @@ public class SubProgramTest {
 		papers = testSub.getPapers();
 		assertTrue(papers.size() == 1);
 		
-		Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name");
+		Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name", listOfAuthorsForPaper.get(0));
 		testSub.addPaper(testPaper2);
 		papers = testSub.getPapers();
         assertTrue(papers.size() == 2);
@@ -109,7 +109,7 @@ public class SubProgramTest {
 		assertTrue(papers.size() == 1);
 		assertEquals(papers.get(0), testPaper);
 
-        Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name");
+        Paper testPaper2 = new Paper(testPaper.getDocumentPath(), testPaper.getAuthors(), "another name", listOfAuthorsForPaper.get(0));
         
 		//Add multiple papers
 		testSub.addPaper(testPaper2);

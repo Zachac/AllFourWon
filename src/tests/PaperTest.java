@@ -40,7 +40,7 @@ public class PaperTest {
 		listOfAuthorsOfPaper.add(new Author("James"));
 		listOfAuthorsOfPaper.add(new Author("John"));
 		
-		paperTestObject = new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper);
+		paperTestObject = new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper, listOfAuthorsOfPaper.get(0));
 	}
 	
 	@Test

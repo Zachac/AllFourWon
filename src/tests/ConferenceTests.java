@@ -96,19 +96,19 @@ public class ConferenceTests {
 		fiveAuthors.add(kevin);
 		fiveAuthors.add(dmitriy);
 		
-		oneAuthorPaper = new Paper(null, oneAuthor, "One Author Title");
-		oneAuthorPaperSecondPaper = new Paper(null, oneAuthor, "One Author Title");
-		oneAuthorPaperThirdPaper = new Paper(null, oneAuthor, "One Author Title");
-		oneAuthorPaperFourthPaper = new Paper(null, oneAuthor, "One Author Title");
-		oneAuthorPaperFifthPaper = new Paper(null, oneAuthor, "One Author Title");
-		oneAuthorPaperSixthPaper = new Paper(null, oneAuthor, "One Author Title");
+		oneAuthorPaper = new Paper(null, oneAuthor, "One Author Title", zach);
+		oneAuthorPaperSecondPaper = new Paper(null, oneAuthor, "One Author Title", brian);
+		oneAuthorPaperThirdPaper = new Paper(null, oneAuthor, "One Author Title", brian);
+		oneAuthorPaperFourthPaper = new Paper(null, oneAuthor, "One Author Title", ian);
+		oneAuthorPaperFifthPaper = new Paper(null, oneAuthor, "One Author Title", kevin);
+		oneAuthorPaperSixthPaper = new Paper(null, oneAuthor, "One Author Title", dmitriy);
 		
-		fiveAuthorPaper = new Paper(null, fiveAuthors, "Five Authors Title");
-		fiveAuthorPaperSecondPaper = new Paper(null, fiveAuthors, "Five Authors Title");
-		fiveAuthorPaperThirdPaper = new Paper(null, fiveAuthors, "Five Authors Title");
-		fiveAuthorPaperFourthPaper = new Paper(null, fiveAuthors, "Five Authors Title");
-		fiveAuthorPaperFifthPaper = new Paper(null, fiveAuthors, "Five Authors Title");
-		fiveAuthorPaperSixthPaper = new Paper(null, fiveAuthors, "Five Authors Title");
+		fiveAuthorPaper = new Paper(null, fiveAuthors, "Five Authors Title", zach);
+		fiveAuthorPaperSecondPaper = new Paper(null, fiveAuthors, "Five Authors Title", zach);
+		fiveAuthorPaperThirdPaper = new Paper(null, fiveAuthors, "Five Authors Title", zach);
+		fiveAuthorPaperFourthPaper = new Paper(null, fiveAuthors, "Five Authors Title", zach);
+		fiveAuthorPaperFifthPaper = new Paper(null, fiveAuthors, "Five Authors Title", ian);
+		fiveAuthorPaperSixthPaper = new Paper(null, fiveAuthors, "Five Authors Title", brian);
 		
 		
 	}

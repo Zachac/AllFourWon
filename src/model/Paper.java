@@ -23,16 +23,20 @@ public class Paper implements Serializable {
     //The date class gets the specified time of the submission down to milliseconds.
     private Date theSubmissionDate;
     
+    /** The one who submitted the paper. */
+	private Author theSubmitter;
+    
     /**
      * Constructor for paper object.
      * @param file
      * @param authors
      * @param title
      */
-    public Paper(Path filePath, List<Author> theAuthors, String theTitle) {
+    public Paper(Path filePath, List<Author> theAuthors, String theTitle, Author submitter) {
         theFilePath = filePath;
         thePaperTitle = theTitle;
         theAuthorNames = theAuthors;
+        theSubmitter = submitter;
         theSubmissionDate = new Date();
     }
     
@@ -70,5 +74,12 @@ public class Paper implements Serializable {
     public Date getSubmissionDate() {
         return theSubmissionDate;
     }
+
+	/**
+	 * @return the theSubmitter
+	 */
+	public Author getTheSubmitter() {
+		return theSubmitter;
+	}
 }
 
