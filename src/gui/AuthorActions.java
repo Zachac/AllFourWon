@@ -50,11 +50,12 @@ public class AuthorActions {
         }
         int command = 1;
         //displays list of all papers the author has submitted
+        output.println("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
         for (int idx = 0; idx < papersSubmittedByAuthor.size(); idx++) {
         	output.println(command + ". " + papersSubmittedByAuthor.get(idx).getTitle()); 
         	command++;		//increments command #
         }
-        output.println("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
+        
 
         //gets user input and validates
         Integer choice = checkIfValidIntegerInput(input.nextLine());
@@ -63,6 +64,7 @@ public class AuthorActions {
 		} 
 		
         if (choice != 0) { //if the user didn't want to cancel, edit the paper
+        	choice--;//account for offset
         	Paper paperToEdit = papersSubmittedByAuthor.get(choice);
         	Integer userDecision = 0;
         	do {
@@ -86,6 +88,7 @@ public class AuthorActions {
 	        		//fail to be submitted?
 	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
 	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+	        		System.out.println("File path has been changed to: " + newFilePath.toString());
 	        		
 	        	} else if (userDecision.equals(2)) { //user changes list of authors
 	        		output.println("Enter new author names,  ");
@@ -101,6 +104,7 @@ public class AuthorActions {
 	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
 	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
 	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+	        		System.out.println("Author list has been changed!");
 	        		
 	        		
 	        	} else if (userDecision.equals(3)) { //user changes 
@@ -110,6 +114,8 @@ public class AuthorActions {
 	        				newTitleOfPaper, paperToEdit.getTheSubmitter());
 	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
 	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+	        		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
+	        		System.out.println("NOTE! Exit paper editor (press 0) for changes to display here");
 	        		
 	        	}
 	        	//checks if input is invalid. If so it re-prompts user
