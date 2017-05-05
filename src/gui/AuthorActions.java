@@ -40,14 +40,36 @@ public class AuthorActions {
         output.println("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
 
         //gets user input and validates
-        Integer choice = checkIfValidIntegerInput(info.in.nextLine());
+        Integer choice = checkIfValidIntegerInput(input.nextLine());
         if (choice > papersSubmittedByAuthor.size() + 1 || choice == null) {
 			info.out.println("Could not find choice");
 		} 
 		
         if (choice != 0) { //if the user didn't want to cancel, edit the paper
         	Paper paperToEdit = papersSubmittedByAuthor.get(choice);
-        	
+        	Integer userDecision = 0;
+        	do {
+	        	output.println("Enter the associated number of the information you want to edit: ");
+	        	output.println("CURRENTLY EDITING: " + paperToEdit.getTitle());
+	        	output.println("0. Exit paper editor");
+	        	output.println("1. Change file path");
+	        	output.println("2. Change list of authors");
+	        	output.println("3. Change title of paper");
+	        	userDecision = checkIfValidIntegerInput(input.nextLine());
+	        	
+	        	//this code is really lame, going to fix it later
+	        	if (userDecision.equals(1)) {
+	        		
+	        	} else if (userDecision.equals(2)) {
+	        		
+	        	} else if (userDecision.equals(3)) {
+	        		
+	        	}
+	        	//checks if input is invalid. If so it re-prompts user
+	        	else if (userDecision.equals(null)) { 
+	        		output.println("Invalid input. Try again");
+	        	}
+        	} while(!userDecision.equals(0)); //while user doesn't want to exit
         }
         
         
