@@ -28,8 +28,6 @@ public class AuthorActions {
 	 * @param info information of the person attempting to edit their papers
 	 */
 	public static void editPaper(UserInfo info) {
-        System.out.println("--temporary flag for editPaper");
-        
         //The location to send the output and input
         PrintStream output = info.out;
         Scanner input = info.in;
@@ -104,10 +102,7 @@ public class AuthorActions {
 	        		output.println("Invalid input. Try again");
 	        	}
         	} while(!userDecision.equals(0)); //while user doesn't want to exit
-        }
-        
-        
-        
+        } 
 	}
 	/**
 	 * Helper method to determine that the user entered a valid integer.
