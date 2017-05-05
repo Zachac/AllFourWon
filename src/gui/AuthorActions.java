@@ -1,6 +1,10 @@
 package gui;
 
 import java.io.PrintStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,9 +23,9 @@ public class AuthorActions {
 	}
 	
 	/**
-	 * Allows logged in user to edit paper if they are the submitter.
+	 * Allows logged in user to edit paper if they are the user who submitted it.
 	 * @author Ian Jury
-	 * @param info
+	 * @param info information of the person attempting to edit their papers
 	 */
 	public static void editPaper(UserInfo info) {
         System.out.println("--temporary flag for editPaper");
@@ -58,11 +62,41 @@ public class AuthorActions {
 	        	userDecision = checkIfValidIntegerInput(input.nextLine());
 	        	
 	        	//this code is really lame, going to fix it later
-	        	if (userDecision.equals(1)) {
+	        	//doesn't check for invalid inputs yet
+	        	if (userDecision.equals(1)) {	//user changes file path
+	        		output.println("Enter new file path: ");
+	        		Path newFilePath = Paths.get(input.nextLine());
+	        		//replace old path
+	        		Paper editedPaper = new Paper(newFilePath, paperToEdit.getAuthors(), 
+	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
+	        		//TODO check if the deadline has passed so a paper wont just be removed and then 
+	        		//fail to be submitted?
+	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
+	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 	        		
-	        	} else if (userDecision.equals(2)) {
+	        	} else if (userDecision.equals(2)) { //user changes list of authors
+	        		output.println("Enter new author names,  ");
+	        		String newAuthorNames = input.nextLine();
+	        		//splits to whitespace
+	        		List<String> stringListOfAuthors = Arrays.asList(newAuthorNames.split("\\s*,\\s*"));
+	        		List<Author> newListOfAuthors = new ArrayList<>();
+	        		//converts string of author names into new list of 'authors'
+	        		for(String authorName : stringListOfAuthors) {
+	        			newListOfAuthors.add(new Author(authorName));
+	        		}
+	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), newListOfAuthors, 
+	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
+	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
+	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 	        		
-	        	} else if (userDecision.equals(3)) {
+	        		
+	        	} else if (userDecision.equals(3)) { //user changes 
+	        		output.println("Enter new title of paper: ");
+	        		String newTitleOfPaper = input.nextLine();
+	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), paperToEdit.getAuthors(), 
+	        				newTitleOfPaper, paperToEdit.getTheSubmitter());
+	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
+	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 	        		
 	        	}
 	        	//checks if input is invalid. If so it re-prompts user
