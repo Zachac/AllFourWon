@@ -60,17 +60,16 @@ public class ConferenceTests {
 		deadlineConference.setDeadline(deadline);
 		
 		before = new Date();
-		before.setTime(before.getTime() - 10000);
+		before.setTime(deadline.getTime() - 10000);
 				
 
 		justBefore = new Date();
-		justBefore.setTime(justBefore.getTime() - 1);
+		justBefore.setTime(deadline.getTime() - 1);
 		
 
-		justAfter = new Date();
+		justAfter = new Date(deadline.getTime());
 		
-		after = new Date();
-		after.setTime(after.getTime() + 10000);
+		after = new Date(deadline.getTime() + 10000);
 		
 		simpleConference = new Conference(null);
 		simpleConference.setDeadline(new Date(new Date().getTime() + DEADLINE));
@@ -112,6 +111,7 @@ public class ConferenceTests {
 		
 		
 	}
+	
 	/**
 	 * A test for the conference constructor.
 	 * @author Zachary Chandler, Brian Geving

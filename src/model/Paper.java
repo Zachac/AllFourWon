@@ -72,10 +72,11 @@ public class Paper implements Serializable {
      * @return the submission date of the file
      */
     public Date getSubmissionDate() {
-        return theSubmissionDate;
+        return (Date) theSubmissionDate.clone();
     }
 
 	/**
+	 * @author Zachary Chandler
 	 * @return the theSubmitter
 	 */
 	public Author getTheSubmitter() {

@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.io.PrintStream;
 import java.util.Scanner;
@@ -76,10 +78,12 @@ public class ConsoleGUI {
 		boolean shouldContinue = true;
 
 		info.out.println();
-		info.out.println("Conferences:");
+		info.out.println("\tCONFERENCES");
+		info.out.println();
 		
 		List<Conference> conferencesList = cm.getConferences();
 		Conference[] conferences = new Conference[conferencesList.size()];
+		Date now = new Date();
 		
 		{
 			// TODO move to separate function?
@@ -94,7 +98,14 @@ public class ConsoleGUI {
 		}
 		
 		for (int i = 0; i < conferences.length; i++) {
-			info.out.println(i + 1 + ": " + conferences[i].name);
+			info.out.printf(i + 1 + ": " + conferences[i].name);
+			if (conferences[i].isBeforeSubmissionDeadline(now)) {
+				info.out.printf("%d: %-15s (%-15s)\n", 
+						i+1, conferences[i].name, conferences[i].getDeadline());				
+			} else {
+				info.out.printf("%d: %-15s (CLOSED)\n",
+						i+1, conferences[i].name);
+			}
 		}
 		
 		info.out.print("Choose Conference (or 0 to exit): ");
@@ -135,33 +146,46 @@ public class ConsoleGUI {
 	    boolean result = true;
 	    
 		info.out.println();
-		info.out.println("dashboard");
+		info.out.println("\tDASH BOARD");
+		
+		displayDashboardInfo(info);
+		info.out.println();
 		
 		RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
+		Date now = new Date();
 		
 		Action[] commands = new Action[5];		
-		int possibleCommands = 1;
+		int possibleCommands = 0;
 
 		System.out.println(possibleCommands + ": choose another conference.");
 		commands[possibleCommands] = (i) -> {};
-		
+		possibleCommands++;
 
-        System.out.println(possibleCommands + ": Submit Paper");
-        commands[possibleCommands] = AuthorActions::submitPaper;
-        possibleCommands++;
-        
-		if (rc.isAuthor) {
-		    List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
-            
-		    if (!papers.isEmpty()) {
-                System.out.println(possibleCommands + ": Remove Paper");
-                commands[possibleCommands] = AuthorActions::removePaper;
-                possibleCommands++;
-                
-                System.out.println(possibleCommands + ": Edit Paper");
-                commands[possibleCommands] = AuthorActions::editPaper;
-                possibleCommands++;
-		    }
+		if (info.getCurrentConference().isBeforeSubmissionDeadline(now)) {
+	        
+			if (rc.isAuthor) {
+			    List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
+	            
+			    if (!info.getCurrentConference().isAuthorAtPaperLimit(rc.getAuthorRole())) {
+			        System.out.println(possibleCommands + ": Submit Paper");
+			        commands[possibleCommands] = AuthorActions::submitPaper;
+			        possibleCommands++;
+			    }
+			    
+			    if (!papers.isEmpty()) {
+	                System.out.println(possibleCommands + ": Remove Paper");
+	                commands[possibleCommands] = AuthorActions::removePaper;
+	                possibleCommands++;
+	                
+	                System.out.println(possibleCommands + ": Edit Paper");
+	                commands[possibleCommands] = AuthorActions::editPaper;
+	                possibleCommands++;
+			    }
+			} else {
+		        System.out.println(possibleCommands + ": Submit Paper");
+		        commands[possibleCommands] = AuthorActions::submitPaper;
+		        possibleCommands++;
+			}
 		}
 		
 		if (rc.isSubProgramChair) {
@@ -179,7 +203,7 @@ public class ConsoleGUI {
 		    
 		}
 		    
-	    System.out.println("Enter choice: ");
+	    System.out.print("Enter choice: ");
 	    String inputLine = info.in.nextLine();
         
         Integer choice;
@@ -194,7 +218,7 @@ public class ConsoleGUI {
             info.out.println("Invalid input."); 
         } else if (choice == 0) {
             result = false;
-        } else if (choice <= possibleCommands){
+        } else if (choice < possibleCommands){
             commands[choice].run(info);
         } else {
             info.out.println("Could not find choice");
@@ -203,23 +227,41 @@ public class ConsoleGUI {
         return result;
 	}
 	
-	public void displayDashboardInfo(UserInfo info) {
+	public static void displayDashboardInfo(UserInfo info) {
         RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         
         if (rc.isAuthor) {
             List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
             
             if (papers.isEmpty()) {
-                System.out.println("You have no authored papers submited!");
+                info.out.println("As an Author, You have not submitted any papers!");
             } else {
-                System.out.println("You have authored:");
+                List<Paper> submitted = new LinkedList<>();
+                List<Paper> coauthored = new LinkedList<>();
                 
                 for (Paper p : papers) {
-                    System.out.print(p.getTitle());
-                    System.out.print('(');
-                    System.out.print(p.getSubmissionDate());
-                    System.out.print(")\n");
+                	if (p.getTheSubmitter() == rc.getAuthorRole()) {
+                		submitted.add(p);
+                	} else {
+                		coauthored.add(p);
+                	}
                 }
+                
+                if (!submitted.isEmpty()) {
+                	info.out.println("As an Author, You have submitted:");
+
+                	for (Paper p : submitted) {
+                		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                	}
+                }
+                
+                if (!coauthored.isEmpty()) {
+                	info.out.println("As an Author, You are the co-author of:");
+
+                	for (Paper p : coauthored) {
+                		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                	}
+                }                
             }
         }
         
@@ -228,15 +270,12 @@ public class ConsoleGUI {
             List<Paper> unReviewedPapers = rc.getReviewerRole().getPapersToBeReviewed();
             
             if (unReviewedPapers.isEmpty()) {
-                System.out.println("You have no papers that need to be reviewed!");
+                System.out.println("As a Reviewer, You have no papers that need to be reviewed!");
             } else {
-                System.out.println("You have papers that need to be reviewed:");
+                System.out.println("As a Reviewer, You have papers that need to be reviewed:");
                 
                 for (Paper p : unReviewedPapers) {
-                    System.out.print(p.getTitle());
-                    System.out.print('(');
-                    System.out.print(p.getSubmissionDate());
-                    System.out.print(")\n");
+            		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
                 }
             }
         }
@@ -245,20 +284,16 @@ public class ConsoleGUI {
             List<Paper> assignedPapers = rc.getSubProgramChairRole().getPapers();
             
             if (assignedPapers.isEmpty()) {
-                System.out.println("You have no papers that need to be reviewed!");
+                System.out.println("As a SubProgramChair, You have no papers assigned to you!");
             } else {
-                System.out.println("You have been assigned the papers:");
+                System.out.println("As a SubProgramChair, You have been assigned the papers:");
                 
                 for (Paper p : assignedPapers) {
-                    System.out.print(p.getTitle());
-                    System.out.print('(');
-                    System.out.print(p.getSubmissionDate());
-                    System.out.print(")\n");
+            		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
                 }
             }
         }
 	}
-	
 	
 }
 
