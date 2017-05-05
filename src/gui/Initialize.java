@@ -42,6 +42,13 @@ public class Initialize {
         
         afterDeadlineConference.submitPaper(new Paper(null, authors, "Parallel Title Conventions", ian));
         
+       
+        beforeDeadlineConference.addAuthor("IANJ");
+        Author ian2 = beforeDeadlineConference.getAuthor("IANJ");
+        List<Author> listForBeforeDeadlineAuthors = new LinkedList<>();
+        listForBeforeDeadlineAuthors.add(ian2);
+        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, "Fake Titles in Early Education", ian2));
+        
         afterDeadlineConference.setDeadline(aMonthBeforeNow);
         
         s.addConference(beforeDeadlineConference);

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import model.Author;
+import model.Conference;
 import model.Paper;
 
 public class AuthorActions {
@@ -31,15 +32,19 @@ public class AuthorActions {
         //The location to send the output and input
         PrintStream output = info.out;
         Scanner input = info.in;
+        Conference currentConference = info.getCurrentConference();
+        Author currentAuthor = currentConference.getAuthor(info.username);
+        
         
        //gets list of papers -note that these are just ones where the user is an author
-        List<Paper> papersThatContainCurrentAuthor = info.getCurrentConference().
-        													getPapers(new Author (info.username));
+        List<Paper> papersThatContainCurrentAuthor = currentConference.getPapers
+        												(currentAuthor);
+        												
         //this is the list of papers that they actually submitted
         List<Paper> papersSubmittedByAuthor = new ArrayList<>();
         for (Paper paperWrittenByAuthor : papersThatContainCurrentAuthor) {
         	//if the paper written by this author was also submitted by this author
-        	if (paperWrittenByAuthor.getTheSubmitter().equals(info.username)) {
+        	if (paperWrittenByAuthor.getTheSubmitter().equals(currentAuthor)) {
         		papersSubmittedByAuthor.add(paperWrittenByAuthor);
         	}
         }
