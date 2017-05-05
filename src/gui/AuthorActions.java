@@ -32,11 +32,21 @@ public class AuthorActions {
         PrintStream output = info.out;
         Scanner input = info.in;
         
-       //gets list of papers
-        List<Paper> papersSubmittedByAuthor = info.getCurrentConference().getPapers(new Author (info.username));
+       //gets list of papers -note that these are just ones where the user is an author
+        List<Paper> papersThatContainCurrentAuthor = info.getCurrentConference().
+        													getPapers(new Author (info.username));
+        //this is the list of papers that they actually submitted
+        List<Paper> papersSubmittedByAuthor = new ArrayList<>();
+        for (Paper paperWrittenByAuthor : papersThatContainCurrentAuthor) {
+        	//if the paper written by this author was also submitted by this author
+        	if (paperWrittenByAuthor.getTheSubmitter().equals(info.username)) {
+        		papersSubmittedByAuthor.add(paperWrittenByAuthor);
+        	}
+        }
         int command = 1;
+        //displays list of all papers the author has submitted
         for (int idx = 0; idx < papersSubmittedByAuthor.size(); idx++) {
-        	output.println(command + ". " + papersSubmittedByAuthor.get(idx).getTitle()); //prints the title and #
+        	output.println(command + ". " + papersSubmittedByAuthor.get(idx).getTitle()); 
         	command++;		//increments command #
         }
         output.println("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
