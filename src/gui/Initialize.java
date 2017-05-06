@@ -10,6 +10,9 @@ import model.Author;
 import model.Conference;
 import model.ConferenceManager;
 import model.Paper;
+import model.Reviewer;
+import model.RolesChecker;
+import model.SubProgramChair;
 import serialization.SerializationHelper;
 
 public class Initialize {
@@ -17,24 +20,62 @@ public class Initialize {
     public static void main(String[] args) {
         ConferenceManager s = new ConferenceManager();
         Set<String> users = new TreeSet<String>();
-        Date now = new Date();
-        Date aMonthFromNow = new Date(now.getTime() + (31L *  24 * 60 * 60 * 1000));
-        Date aMonthBeforeNow = new Date(now.getTime() - (31L *  24 * 60 * 60 * 1000));
+        users.add("ZACHAC");
+        users.add("IANJ");
+        users.add("KVN96");
+        users.add("DIMABLIZ");
+        
+        s.addConference(getBeforeDeadlineConference());
+        s.addConference(getAfterDeadlineConference());        
+        
+        SerializationHelper.saveConferenceManager(s);
+        SerializationHelper.saveUsers(users);
+    }
+    
+    public static Conference getBeforeDeadlineConference() {
+        Date aMonthFromNow = new Date(1497787200000L);
 
         Conference beforeDeadlineConference = new Conference("ABC Conference");
         beforeDeadlineConference.setDeadline(aMonthFromNow);
+
+        beforeDeadlineConference.addAuthor("IANJ");
+        Author ian2 = beforeDeadlineConference.getAuthor("IANJ");
+        List<Author> listForBeforeDeadlineAuthors = new LinkedList<>();
+        listForBeforeDeadlineAuthors.add(ian2);
+        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, 
+                "Fake Titles in Early Education", ian2));
         
+        return beforeDeadlineConference;
+    }
+    
+    public static Conference getAfterDeadlineConference() {
         Conference afterDeadlineConference = new Conference("XYZ Conference");
-        afterDeadlineConference.setDeadline(aMonthFromNow);
+        afterDeadlineConference.setDeadline(new Date(1497787200000L));
         afterDeadlineConference.addAuthor("ZACHAC");
+        afterDeadlineConference.addSubprogramChair("KVN96");
+        afterDeadlineConference.addReviewer("DIMABLIZ");
         
+        SubProgramChair kevin = new RolesChecker(afterDeadlineConference.getRoles("KVN96")).getSubProgramChairRole();
+        Reviewer dima = new RolesChecker(afterDeadlineConference.getRoles("DIMABLIZ")).getReviewerRole();
         Author zach = afterDeadlineConference.getAuthor("ZACHAC");
+        
         List<Author> authors = new LinkedList<>();
         authors.add(zach);
         
-        afterDeadlineConference.submitPaper(new Paper(null, authors, "Constructing Fake Titles", zach));
-        afterDeadlineConference.submitPaper(new Paper(null, authors, "Detecting Fake Titles", zach));
-        afterDeadlineConference.submitPaper(new Paper(null, authors, "Analyzing Fake Titles", zach));
+        Paper p = new Paper(null, authors, "Constructing Fake Titles", zach);
+        afterDeadlineConference.submitPaper(p);
+        kevin.addPaper(p);
+        dima.assign(p);
+
+        p = new Paper(null, authors, "Detecting Fake Titles", zach);
+        afterDeadlineConference.submitPaper(p);
+        kevin.addPaper(p);
+        dima.assign(p);
+
+        p = new Paper(null, authors, "Analyzing Fake Titles", zach);
+        afterDeadlineConference.submitPaper(p);
+        kevin.addPaper(p);
+        dima.assign(p);
         
         afterDeadlineConference.addAuthor("IANJ");
         Author ian = afterDeadlineConference.getAuthor("IANJ");
@@ -42,23 +83,9 @@ public class Initialize {
         
         afterDeadlineConference.submitPaper(new Paper(null, authors, "Parallel Title Conventions", ian));
         
-       
-        beforeDeadlineConference.addAuthor("IANJ");
-        Author ian2 = beforeDeadlineConference.getAuthor("IANJ");
-        List<Author> listForBeforeDeadlineAuthors = new LinkedList<>();
-        listForBeforeDeadlineAuthors.add(ian2);
-        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, "Fake Titles in Early Education", ian2));
+        afterDeadlineConference.setDeadline(new Date(1487419200000L));
         
-        afterDeadlineConference.setDeadline(aMonthBeforeNow);
-        
-        s.addConference(beforeDeadlineConference);
-        s.addConference(afterDeadlineConference);
-        
-        users.add("ZACHAC");
-        users.add("IANJ");
-        
-        SerializationHelper.saveConferenceManager(s);
-        SerializationHelper.saveUsers(users);
+        return afterDeadlineConference;
     }
 
 }

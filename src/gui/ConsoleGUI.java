@@ -17,6 +17,7 @@ import model.RolesChecker;
  * 		logs in a user.
  * 		chooses a conference.
  * 		displays the dash board to a user.
+ *      allows the user to chooses actions. 
  * 
  * @author Zachary Chandler
  */
@@ -81,49 +82,30 @@ public class ConsoleGUI {
 		info.out.println("\tCONFERENCES");
 		info.out.println();
 		
-		List<Conference> conferencesList = cm.getConferences();
-		Conference[] conferences = new Conference[conferencesList.size()];
+		Conference[] conferences = cm.getConferences().toArray(new Conference[0]);
 		Date now = new Date();
-		
-		{
-			// TODO move to separate function?
-			int i = 0;
-			for (Conference c : conferencesList) {
-				conferences[i++] = c;
-			}
-		}
 		
 		if (conferences.length == 0) {
 			info.out.println("There are no conferences right now.");
-		}
-		
-		for (int i = 0; i < conferences.length; i++) {
-			info.out.printf(i + 1 + ": " + conferences[i].name);
-			if (conferences[i].isBeforeSubmissionDeadline(now)) {
-				info.out.printf("%d: %-15s (%-15s)\n", 
-						i+1, conferences[i].name, conferences[i].getDeadline());				
-			} else {
-				info.out.printf("%d: %-15s (CLOSED)\n",
-						i+1, conferences[i].name);
-			}
+		} else {
+		    for (int i = 0; i < conferences.length; i++) {
+		        if (conferences[i].isBeforeSubmissionDeadline(now)) {
+		            info.out.printf("%d: %-15s (%-15s)\n", 
+		                    i+1, conferences[i].name, conferences[i].getDeadline());				
+		        } else {
+		            info.out.printf("%d: %-15s (CLOSED)\n",
+		                    i+1, conferences[i].name);
+		        }
+		    }		    
 		}
 		
 		info.out.print("Choose Conference (or 0 to exit): ");
-		
-		String inputLine = info.in.nextLine();
-		
-		Integer choice;
-		
-		try {
-			choice = Integer.parseInt(inputLine);			
-		} catch (NumberFormatException e) { 
-			choice = null;
-		}
+		Integer choice = getNumberInput(info);
 		
 		if (choice == null) {
 			info.out.println("Invalid input.");			
-		} else if (choice > conferences.length + 1) {
-			info.out.println("Could not find choice");
+		} else if (choice > conferences.length + 1 || choice < 0) {
+			info.out.println("Sorry, we couldn't find that option.");
 		} else if (choice == 0) {
 			shouldContinue = false;
 		} else {
@@ -133,6 +115,26 @@ public class ConsoleGUI {
 		}
 				
 		return shouldContinue;
+	}
+	
+	/**
+	 * Get a number from the input.
+	 * 
+	 * @param info the user we are dealing with.
+	 * @return the number, or null if the user gave an invalid number.
+	 */
+	public static Integer getNumberInput(UserInfo info) {
+        String inputLine = info.in.nextLine();
+        
+        Integer choice;
+        
+        try {
+            choice = Integer.parseInt(inputLine);           
+        } catch (NumberFormatException e) { 
+            choice = null;
+        }
+        
+        return choice;
 	}
 	
 	/**
@@ -147,79 +149,28 @@ public class ConsoleGUI {
 	    
 		info.out.println();
 		info.out.println("\tDASH BOARD");
+		info.out.println();		    
 		
-		displayDashboardInfo(info);
-		info.out.println();
-		
-		RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
-		Date now = new Date();
-		
-		Action[] commands = new Action[5];		
-		int possibleCommands = 0;
-
-		System.out.println(possibleCommands + ": choose another conference.");
-		commands[possibleCommands] = (i) -> {};
-		possibleCommands++;
-
-		if (info.getCurrentConference().isBeforeSubmissionDeadline(now)) {
-	        
-			if (rc.isAuthor) {
-			    List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
-	            
-			    if (!info.getCurrentConference().isAuthorAtPaperLimit(rc.getAuthorRole())) {
-			        System.out.println(possibleCommands + ": Submit Paper");
-			        commands[possibleCommands] = AuthorActions::submitPaper;
-			        possibleCommands++;
-			    }
-			    
-			    if (!papers.isEmpty()) {
-	                System.out.println(possibleCommands + ": Remove Paper");
-	                commands[possibleCommands] = AuthorActions::removePaper;
-	                possibleCommands++;
-	                
-	                System.out.println(possibleCommands + ": Edit Paper");
-	                commands[possibleCommands] = AuthorActions::editPaper;
-	                possibleCommands++;
-			    }
-			} else {
-		        System.out.println(possibleCommands + ": Submit Paper");
-		        commands[possibleCommands] = AuthorActions::submitPaper;
-		        possibleCommands++;
-			}
+		if (displayDashboardInfo(info)) {
+		    info.out.println();
 		}
 		
-		if (rc.isSubProgramChair) {
-		    List<Paper> papers = rc.getSubProgramChairRole().getPapers();
-		    
-		    if (!papers.isEmpty()) {
-		        System.out.println(possibleCommands + ": Assign Reviewer");
-                commands[possibleCommands] = SubProgramChairActions::assignReviewer;
-                possibleCommands++;
-                
-                System.out.println(possibleCommands + ": Remove Reviewer");
-                commands[possibleCommands] = SubProgramChairActions::removeReviewer;
-                possibleCommands++;
-		    }
-		    
-		}
+		List<Action> commands = new LinkedList<Action>();
+		System.out.println(commands.size() + ": choose another conference.");
+		commands.add((i) -> {});
+		
+		addAuthorActions(info, commands);
+		addSubProgramChairActions(info, commands);
 		    
 	    System.out.print("Enter choice: ");
-	    String inputLine = info.in.nextLine();
-        
-        Integer choice;
-        
-        try {
-            choice = Integer.parseInt(inputLine);           
-        } catch (NumberFormatException e) { 
-            choice = null;
-        }
+        Integer choice = getNumberInput(info);
         
         if (choice == null) {
             info.out.println("Invalid input."); 
         } else if (choice == 0) {
             result = false;
-        } else if (choice < possibleCommands){
-            commands[choice].run(info);
+        } else if (choice < commands.size() && choice > 0){
+            commands.get(choice).run(info);
         } else {
             info.out.println("Could not find choice");
         }
@@ -227,8 +178,81 @@ public class ConsoleGUI {
         return result;
 	}
 	
-	public static void displayDashboardInfo(UserInfo info) {
+	/**
+	 * Add SubProgramChair actions if the given user is a SubProgramChair.
+	 * @param info the user.
+	 * @param commands the commands to add actions to.
+	 */
+    private static void addSubProgramChairActions(UserInfo info, List<Action> commands) {
         RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
+        
+        if (rc.isSubProgramChair) {
+            List<Paper> papers = rc.getSubProgramChairRole().getPapers();
+            
+            if (!papers.isEmpty()) {
+                System.out.println(commands.size() + ": Assign Reviewer");
+                commands.add(SubProgramChairActions::assignReviewer);
+                
+                System.out.println(commands.size() + ": Remove Reviewer");
+                commands.add(SubProgramChairActions::removeReviewer);
+            }
+        }
+    }
+
+    /**
+     * Add Author actions if the given user is a Author.
+     * @param info the user.
+     * @param commands the commands to add actions to.
+     */
+    private static void addAuthorActions(UserInfo info, List<Action> commands) {
+        RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
+	    
+	    if (info.getCurrentConference().isBeforeSubmissionDeadline(new Date())) {
+            
+            if (rc.isAuthor) {
+                List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
+                
+                if (!info.getCurrentConference().isAuthorAtPaperLimit(rc.getAuthorRole())) {
+                    System.out.println(commands.size() + ": Submit Paper");
+                    commands.add(AuthorActions::submitPaper);
+                }
+                
+                if (!papers.isEmpty()) {
+                    System.out.println(commands.size() + ": Remove Paper");
+                    commands.add(AuthorActions::removePaper);
+                    
+                    System.out.println(commands.size() + ": Edit Paper");
+                    commands.add(AuthorActions::editPaper);
+                }
+            } else {
+                System.out.println(commands.size() + ": Submit Paper");
+                commands.add(AuthorActions::submitPaper);
+            }
+        }
+    }
+
+    /**
+	 * Display information to a user that they should know.
+	 * @param info the user.
+	 * @return if we displayed anything at all.
+	 */
+	public static boolean displayDashboardInfo(UserInfo info) {
+        boolean result = false;
+        
+        result = displayAuthorInfo(info) || result;
+        result = displayReviewerInfo(info) || result;
+        result = displaySubProgramChairInfo(info) || result;
+        
+        return result;
+	}
+	
+	/**
+	 * Display information to the user if they are an author.
+	 * @param info the user.
+	 * @return if we displayed anything to the user.
+	 */
+    public static boolean displayAuthorInfo(UserInfo info) {
+	    RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         
         if (rc.isAuthor) {
             List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
@@ -240,31 +264,41 @@ public class ConsoleGUI {
                 List<Paper> coauthored = new LinkedList<>();
                 
                 for (Paper p : papers) {
-                	if (p.getTheSubmitter() == rc.getAuthorRole()) {
-                		submitted.add(p);
-                	} else {
-                		coauthored.add(p);
-                	}
+                    if (p.getTheSubmitter() == rc.getAuthorRole()) {
+                        submitted.add(p);
+                    } else {
+                        coauthored.add(p);
+                    }
                 }
                 
                 if (!submitted.isEmpty()) {
-                	info.out.println("As an Author, You have submitted:");
-
-                	for (Paper p : submitted) {
-                		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
-                	}
+                    info.out.println("As an Author, You have submitted:");
+                    
+                    for (Paper p : submitted) {
+                        info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                    }
                 }
                 
                 if (!coauthored.isEmpty()) {
-                	info.out.println("As an Author, You are the co-author of:");
-
-                	for (Paper p : coauthored) {
-                		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
-                	}
+                    info.out.println("As an Author, You are the co-author of:");
+                    
+                    for (Paper p : coauthored) {
+                        info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                    }
                 }                
             }
         }
         
+	    return rc.isAuthor;
+	}
+
+    /**
+     * Display information to the user if they are an reviewer.
+     * @param info the user.
+     * @return if we displayed anything to the user.
+     */
+    private static boolean displayReviewerInfo(UserInfo info) {
+        RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
 
         if (rc.isReviewer) {
             List<Paper> unReviewedPapers = rc.getReviewerRole().getPapersToBeReviewed();
@@ -275,10 +309,21 @@ public class ConsoleGUI {
                 System.out.println("As a Reviewer, You have papers that need to be reviewed:");
                 
                 for (Paper p : unReviewedPapers) {
-            		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                    info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
                 }
             }
         }
+        
+        return rc.isReviewer;
+    }
+
+    /**
+     * Display information to the user if they are an subprogram chair.
+     * @param info the user.
+     * @return if we displayed anything to the user.
+     */
+    private static boolean displaySubProgramChairInfo(UserInfo info) {
+        RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         
         if (rc.isSubProgramChair) {
             List<Paper> assignedPapers = rc.getSubProgramChairRole().getPapers();
@@ -289,14 +334,21 @@ public class ConsoleGUI {
                 System.out.println("As a SubProgramChair, You have been assigned the papers:");
                 
                 for (Paper p : assignedPapers) {
-            		info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
+                    info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
                 }
             }
         }
-	}
+        
+        return rc.isSubProgramChair;
+    }
 	
 }
 
+/**
+ * A simple interface to allow actions to become Objects.
+ * 
+ * @author Zachary Chandler
+ */
 interface Action {
     void run(UserInfo info);
 }
