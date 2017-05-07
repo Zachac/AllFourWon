@@ -21,18 +21,22 @@ public class AuthorActions extends Throwable {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * This adds the paper to the conference after asking the user for the
-	 * information associated to it. Method name due to change since it's a
-	 * duplicate of the conference submitPaper method.
+	 * This method allows the user to submit a paper to the conference he is currently in.
+	 * 
+	 *  * Preconditions: 
+	 * 		The user info and all related fields must be valid
+	 * 		All author information must be valid
+	 *  	It must not be past the conference's submission deadline
+	 * Postconditions: 
+	 * 		The specified paper will be submitted to the conference
 	 * 
 	 * @author Kevin Nguyen
-	 * @param info
+	 * @param info information of the user trying to submit a paper.
 	 */
 	public static void submitPaper(UserInfo info) {
 		PrintStream output = info.out;
 		Scanner input = info.in;
 		Conference currentConference = info.getCurrentConference();
-		Set<String> users = SerializationHelper.loadUsers();
 		List<Author> theCoAuthors = new LinkedList<>();
 		Author currentAuthor = currentConference.getAuthor(info.username);
 		if (currentAuthor == null) {
@@ -58,58 +62,39 @@ public class AuthorActions extends Throwable {
 		}
 		
 		output.print("Enter the title of the paper:");
-		String paperTitle = input.nextLine();
-		
-		Integer choice = -1;
-		do {
-			// This will be done possibly by checkmarking in the future.
-			// For the terminal would it be better to simply have a for loop of
-			// the other users and have the user input the number/index?
-		    output.println();
-			output.println("0: Add a Co-Author to the paper (by username).");
-			output.println("1: If there are no Co-authors or none left to add.");//TODO could be better worded
-			
-			// This will possibly already be shown in the gui in the future. I
-			// think we need a way to show the real names aswell.
-			output.println("2: To Display Current Authors registered in the System.");
-			output.print("Enter choice: ");
-			
-			// I have to create a new scanner because printStream caused a bug.
-			choice = ConsoleGUI.getNumberInput(info);
-
-			if (choice.equals(0)) {
-				output.print("Enter the username of the Co-author: ");
-				String coAuthorUserName = input.nextLine().trim().toUpperCase();
-				
-				if (users.contains(coAuthorUserName) && coAuthorUserName != info.getUserName()) {
-					currentConference.addAuthor(coAuthorUserName);
-					
-					// Makes the author the user.
-					Author userNameInitAsAuthor = currentConference.getAuthor(coAuthorUserName);
-					theCoAuthors.add(userNameInitAsAuthor);
-					output.println(coAuthorUserName + " Added as a Co-Author.");
-				} else {
-					// For confidentiality purposes the author cannot register
-					// for co authors. We can change this however if you guys
-					// want.
-					output.println(
-							"Username not found. If the username you're looking for doesn't exist inform the Co-Author to register and add him/her back in later.");
-				}
-			} else if (choice.equals(2)) {
-				// This prints out all the other users in the terminal
-			    output.println();
-				info.getOtherUsers().stream().forEach(output::println);
-			}
-		} while (!choice.equals(1));
-		
+		String paperTitle = input.nextLine();	
+		theCoAuthors = createNewListOfAuthorsOfPaper(info);
 		Paper conferenceSubmission = new Paper(Paths.get(filePath), theCoAuthors, paperTitle, currentAuthor);
-		
-		// Need to display the co authors and authors to the paper.
-		output.print("You are about to submit the paper: \"" + conferenceSubmission.getTitle() + "\" Proceed? (Yes/No): ");
+		paperSubmissionConfirmation(conferenceSubmission, info, currentConference);
+	}
+	/**
+	 * This shows the user if they want to submit the paper they created.
+	 * Shows them the metadata so they can confirm with confidence.
+	 * 
+	 * Preconditions: 
+	 * 		The user info and all related fields must be valid
+	 * 		All author information must be valid.
+	 * 		The conference must be able to receive papers.
+	 * 		The paper must already be created.
+	 *  	It must not be past the conference's submission deadline
+	 * Postconditions: 
+	 * 		The specified paper will be successfully submitted to the conference.
+	 * 
+	 * @author Kevin Nguyen
+	 * @param info information of the user submitting the paper.
+	 * @param thePaper the paper object being submitted to the conference.
+	 * @param theConference the conference that the paper is being submitted to
+	 */
+	public static void paperSubmissionConfirmation(Paper thePaper, UserInfo info, Conference theConference) {
+		PrintStream output = info.out;
+		Scanner input = info.in;
+		theConference = info.getCurrentConference();
+		// Currently I need a way to display the co authors of the paper.
+		output.print("You are about to submit the paper: \"" + thePaper.getTitle() + "\" Proceed? (Yes/No): ");
 		String ans = input.nextLine().trim().toUpperCase();
 
 		if (ans.equals("YES") || ans.equals("Y")) {
-			boolean submitted = currentConference.submitPaper(conferenceSubmission);
+			boolean submitted = theConference.submitPaper(thePaper);
 			
 			if (submitted) {
 			    output.println("Submitted!");			    
