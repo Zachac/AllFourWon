@@ -45,7 +45,20 @@ public class UserInfo {
 		
 		this.setCurrentConference(null);
 	}
-	
+	/**
+	 * This method is made to help display all the current users.
+	 *@return otherusers all the other users in the system
+	 */
+	public Set<String> getOtherUsers() {
+		return otherUsers;
+	}
+	/**
+	 * Gets the username which helps for the paper submission
+	 * @return the username
+	 */
+	public String getUserName() {
+		return username;
+	}
 	/**
 	 * @return the current conference this user is in.
 	 */
