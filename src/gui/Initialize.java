@@ -45,6 +45,12 @@ public class Initialize {
         listForBeforeDeadlineAuthors.add(ian2);
         beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, 
                 "Fake Titles in Early Education", ian2));
+        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, 
+                "More Things to Think About", ian2));
+        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, 
+                "Education and Age: Correlation?", ian2));
+        beforeDeadlineConference.submitPaper(new Paper(null,  listForBeforeDeadlineAuthors, 
+                "Another Review on Education and Things", ian2));
         
         return beforeDeadlineConference;
     }
