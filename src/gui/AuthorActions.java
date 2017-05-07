@@ -164,9 +164,12 @@ public class AuthorActions extends Throwable {
 		output.print("Enter the associated number of the paper you want to remove (or 0 to cancel): ");
 		// gets user input and validates
 		Integer choice = checkIfValidIntegerInput(input.nextLine());
-		if (choice > papersSubmittedByAuthor.size() + 1 || choice == null) {
-			info.out.println("Could not find choice");
-		} if (choice != 0) { // if the user didn't want to cancel, edit the paper
+		//if user puts invalid input, then put then back to the dashboard
+        if (choice > papersSubmittedByAuthor.size()  || choice < 0) {
+    		info.out.println("Invalid input. Going back to dashboard.");
+    		choice = 0;
+    	}         
+		  if (choice != 0) { // if the user didn't want to cancel, edit the paper
 			choice--;// account for offset
 			Paper paperToRemove = papersSubmittedByAuthor.get(choice);
 			currentConference.removePaper(paperToRemove);
@@ -241,10 +244,12 @@ public class AuthorActions extends Throwable {
         
 
         //gets user input and validates
-        Integer choice = checkIfValidIntegerInput(input.nextLine());
-        if (choice > papersSubmittedByAuthor.size() || choice == null) {
-			info.out.println("Could not find choice");
-		} 
+        int choice = checkIfValidIntegerInput(input.nextLine());
+        //if user puts invalid input, then put then back to the dashboard
+        if (choice > papersSubmittedByAuthor.size()  || choice < 0) {
+    		info.out.println("Invalid input. Going back to dashboard.");
+    		choice = 0;
+    	}         
 		
         if (choice != 0) { //if the user didn't want to cancel, edit the paper
         	choice--;//account for offset
