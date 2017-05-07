@@ -284,8 +284,7 @@ public class AuthorActions extends Throwable {
 	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
 	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 	        		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
-	        		System.out.println("NOTE! Exit paper editor (0) for changes to display here");// TODO kinda unclear what is happening here -zach
-	        		
+	        		paperToEdit = editedPaper; //reassign to display new title in edit menu
 	        	}
 	        	//checks if input is invalid. If so it re-prompts user
 	        	else if (userDecision.equals(null)) { 
