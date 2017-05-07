@@ -17,7 +17,7 @@ public class Main {
 			return;
 		}
 		
-		System.out.println("Welcome to COMPANY_NAME conferences!");
+		System.out.println("Welcome to MSEE conferences!");
 		
 		UserInfo info = null;
 		while(info == null) {
