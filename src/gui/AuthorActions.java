@@ -207,8 +207,7 @@ public class AuthorActions extends Throwable {
         	if (paperWrittenByAuthor.getTheSubmitter().equals(currentAuthor)) {
         		papersSubmittedByAuthor.add(paperWrittenByAuthor);
         	}
-        }
-        
+        }      
 
         output.println("\nSubmitted Papers:");
         int command = 1;
@@ -238,61 +237,99 @@ public class AuthorActions extends Throwable {
 	        	output.println("2. Change list of authors");
 	        	output.println("3. Change title of paper");
 	        	output.print("Enter the associated number of the information you want to edit: ");
-	        	userDecision = checkIfValidIntegerInput(input.nextLine());
 	        	
-	        	//this code is really lame, going to fix it later TODO
-	        	//doesn't check for invalid inputs yet
-	        	if (userDecision.equals(1)) {	//user changes file path
-	        		output.println("Enter new file path: ");
-	        		Path newFilePath = Paths.get(input.nextLine());
-	        		//replace old path
-	        		Paper editedPaper = new Paper(newFilePath, paperToEdit.getAuthors(), 
-	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
-	        		//TODO check if the deadline has passed so a paper wont just be removed and then 
-	        		//fail to be submitted?
-	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
-	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
-	        		System.out.println("File path has been changed to: " + newFilePath.toString());
-	        		
+	        	//prevents user from entering non integers
+	        	if ((userDecision = checkIfValidIntegerInput(input.nextLine())).equals(-1)) {
+	        		System.out.println("Invalid input.");
+	        	}
+
+	        	else if (userDecision.equals(1)) {	//user changes file path
+	        		paperToEdit = changeFilePathOfPaper(paperToEdit, info);
+	        		  		
 	        	} else if (userDecision.equals(2)) { //user changes list of authors
-	        		output.print("Enter new author names: ");
-	        		String newAuthorNames = input.nextLine();
-	        		//splits to whitespace
-	        		List<String> stringListOfAuthors = Arrays.asList(newAuthorNames.split("\\s*,\\s*"));
-	        		List<Author> newListOfAuthors = new ArrayList<>();
-	        		//converts string of author names into new list of 'authors'
-	        		for(String authorName : stringListOfAuthors) {
-	        			newListOfAuthors.add(new Author(authorName));
-	        		}
-	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), newListOfAuthors, 
-	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
-	        		
-	        		if (info.getCurrentConference().submitPaper(editedPaper) == false) { //add the edited paper
-	        			//if the paper couldn't be submitted because an author was invalid/ not part of conference
-	        			output.println("The editing of authors was not possible because one of the usernames " + 
-	        			"you entered is not valid for the current conference.\nNo changes were made. Please try again.\n");
-	        		} else {
-	        			info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
-	        			System.out.println("Author list has been changed!");
-	        		}
+	        		paperToEdit = changeAuthorsOfPaper(paperToEdit, info);
 	        		
 	        	} else if (userDecision.equals(3)) { //user changes 
-	        		output.print("Enter new title of paper: ");
-	        		String newTitleOfPaper = input.nextLine();
-	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), paperToEdit.getAuthors(), 
-	        				newTitleOfPaper, paperToEdit.getTheSubmitter());
-	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
-	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
-	        		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
-	        		paperToEdit = editedPaper; //reassign to display new title in edit menu
+	        		paperToEdit = changeTitleOfPaper(paperToEdit, info);
 	        	}
-	        	//checks if input is invalid. If so it re-prompts user
-	        	else if (userDecision.equals(null)) { 
+	        	//checks if input is a number not specified
+	        	else  { 
 	        		output.println("Invalid input. Try again");
 	        	}
         	} while(!userDecision.equals(0)); //while user doesn't want to exit
         } 
 	}
+	/**
+	 * Takes the old paper and returns a new paper object with a new file path
+	 * specified by the user.
+	 * @author Ian Jury
+	 * @param theOriginalPaper
+	 * @return the new paper object
+	 */
+	private static Paper changeFilePathOfPaper(Paper theOriginalPaper, UserInfo info) {
+		info.out.println("Enter new file path: ");
+		Path newFilePath = Paths.get(info.in.nextLine());
+		
+		Paper editedPaper = new Paper(newFilePath, theOriginalPaper.getAuthors(), 
+				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
+		//TODO check if the deadline has passed so a paper wont just be removed and then 
+		//fail to be submitted?
+		info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
+		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+		System.out.println("File path has been changed to: " + newFilePath.toString());
+		return editedPaper;
+		
+	}
+	/**
+	 * Takes the old paper and returns a new paper object with a new list of authors
+	 * specified by the user.
+	 * Preconditions: All authors must be valid for the specific conference
+	 * @author Ian Jury
+	 * @param theOriginalPaper
+	 */
+	private static Paper changeAuthorsOfPaper(Paper theOriginalPaper, UserInfo info) {
+		info.out.print("Enter new author names: ");
+		String newAuthorNames = info.in.nextLine();
+		//splits to whitespace
+		List<String> stringListOfAuthors = Arrays.asList(newAuthorNames.split("\\s*,\\s*"));
+		List<Author> newListOfAuthors = new ArrayList<>();
+		//converts string of author names into new list of 'authors'
+		for(String authorName : stringListOfAuthors) {
+			newListOfAuthors.add(new Author(authorName));
+		}
+		Paper editedPaper = new Paper(theOriginalPaper.getDocumentPath(), newListOfAuthors, 
+				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
+		
+		if (info.getCurrentConference().submitPaper(editedPaper) == false) { //add the edited paper
+			//if the paper couldn't be submitted because an author was invalid/ not part of conference
+			info.out.println("The editing of authors was not possible because one of the usernames " + 
+			"you entered is not valid for the current conference.\nNo changes were made. Please try again.\n");
+			return theOriginalPaper; //if no changes could be made, return the original paper
+		} else {
+			info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
+			System.out.println("Author list has been changed!");
+			return editedPaper; //else return the new paper
+		}
+		
+	}
+	/**
+	 * Takes the old paper and returns a new paper object with a new title
+	 * specified by the user.
+	 * @author Ian Jury
+	 * @param theOriginalPaper
+	 */
+	private static Paper changeTitleOfPaper(Paper theOriginalPaper, UserInfo info) {
+		info.out.print("Enter new title of paper: ");
+		String newTitleOfPaper = info.in.nextLine();
+		Paper editedPaper = new Paper(theOriginalPaper.getDocumentPath(), theOriginalPaper.getAuthors(), 
+				newTitleOfPaper, theOriginalPaper.getTheSubmitter());
+		info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
+		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
+		return editedPaper;
+		
+	}
+	
 	/**
 	 * Helper method to determine that the user entered a valid integer.
 	 * @author Ian Jury
@@ -302,10 +339,11 @@ public class AuthorActions extends Throwable {
 	private static int checkIfValidIntegerInput(String userInput) {
 		Integer choice;
 		try {
-			choice = Integer.parseInt(userInput);			
+			choice = Integer.parseInt(userInput);
+			return choice;
 		} catch (NumberFormatException e) { 
 			choice = null;
 		}
-		return choice;
+		return -1;
 	}
 }
