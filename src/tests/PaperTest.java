@@ -43,27 +43,39 @@ public class PaperTest {
 		paperTestObject = new Paper(filePathOfPaper, listOfAuthorsOfPaper, titleOfPaper, listOfAuthorsOfPaper.get(0));
 	}
 	
+	/**
+	 * Test that paper object returns correct author values.
+	 */
 	@Test
 	public void getAuthorsTest() {
 		List<Author> returnedAuthors = paperTestObject.getAuthors();
 		
-		assertTrue(returnedAuthors.size() == 2);
+		assertTrue("Two authors should be returned", returnedAuthors.size() == 2);
 		
 		for (Author a : returnedAuthors) {
 		    assertTrue(a.getUser().equals("James") || a.getUser().equals("John"));
 		}
 	}
 
+	/**
+	 * Test to see if paper returns correct title.
+	 */
 	@Test
 	public void getTitleTest() {
 		assertEquals(paperTestObject.getTitle(), "Example");
 	}
 	
+	/**
+	 * Test to see if paper returns correct filepath.
+	 */
 	@Test
 	public void getDocumentPathTest() {
 		assertEquals(paperTestObject.getDocumentPath(), filePathOfPaper);
 	}
 	
+	/**
+	 * Test to see if paper returns correct submission date.
+	 */
 	@Test
 	public void getSubmissionDateTest() {
 		Date testDate = new Date();

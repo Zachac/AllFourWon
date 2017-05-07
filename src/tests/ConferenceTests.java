@@ -24,6 +24,7 @@ public class ConferenceTests {
 	Conference emptyConference;
 	Conference simpleConference;
 	Conference deadlineConference;
+	Conference conferenceRoles;
 	Date deadline;
 	Date before;
 	Date justBefore;
@@ -36,6 +37,7 @@ public class ConferenceTests {
 	Author kevin;
 	List<Author> oneAuthor;
 	List<Author> fiveAuthors;
+	List<Role> roles;
 	Paper oneAuthorPaper;
 	Paper oneAuthorPaperSecondPaper;
 	Paper oneAuthorPaperThirdPaper;
@@ -52,6 +54,14 @@ public class ConferenceTests {
 	@Before
 	public void setUp() {
 		
+		conferenceRoles = new Conference(null);
+		conferenceRoles.addAuthor("Ian");
+		conferenceRoles.addReviewer("Ian");
+		conferenceRoles.addSubprogramChair("Zach");
+        conferenceRoles.addAuthor("Dimitry");
+        conferenceRoles.addSubprogramChair("Dimitry");
+        conferenceRoles.addReviewer("Dimitry");
+        
 		emptyConference = new Conference(null);
 		
 		deadline = new Date();
@@ -78,6 +88,9 @@ public class ConferenceTests {
 		simpleConference.addAuthor("ianjury");
 		simpleConference.addAuthor("briang5");
 		simpleConference.addAuthor("kvn96");
+		simpleConference.addReviewer("reviewer1");
+		simpleConference.addReviewer("reviewer2");
+		simpleConference.addReviewer("reviewer3");
 		
 		zach = simpleConference.getAuthor("zachac");
 		brian = simpleConference.getAuthor("briang5");
@@ -211,18 +224,7 @@ public class ConferenceTests {
      */
     @Test
     public void testGetRoles() {
-        Conference conRole = new Conference(null);
-        
-        conRole.addAuthor("Ian"); 
-        conRole.addReviewer("Ian");
-        
-        conRole.addSubprogramChair("Zach");
-        
-        conRole.addAuthor("Dimitry");
-        conRole.addSubprogramChair("Dimitry");
-        conRole.addReviewer("Dimitry");
-
-        List<Role> roles = conRole.getRoles("Ian");
+    	roles = conferenceRoles.getRoles("Ian");
         boolean foundAuthor = false;
         boolean foundReviewer = false;
         for (Role r : roles) {
@@ -237,7 +239,7 @@ public class ConferenceTests {
         assertTrue(foundReviewer);
         
 
-        roles = conRole.getRoles("Zach");
+        roles = conferenceRoles.getRoles("Zach");
         boolean foundSubProgramChair = false;
         for (Role r : roles) {
             if (!foundSubProgramChair && r instanceof SubProgramChair) {
@@ -247,7 +249,7 @@ public class ConferenceTests {
         assertTrue(foundSubProgramChair);
         
 
-        roles = conRole.getRoles("Dimitry");
+        roles = conferenceRoles.getRoles("Dimitry");
         foundSubProgramChair = false;
         foundAuthor = false;
         foundReviewer = false;
@@ -269,21 +271,16 @@ public class ConferenceTests {
     }
 	/**
 	 * Testing the addReviewer method and the getReviewer method in Conference class.
-	 * @author Dmitriy Bliznyuk
+	 * @author Dmitriy Bliznyuk, Brian Geving
 	 */
 	@Test
 	public void testAddGetReviewer() {
-		Conference testConference = new Conference(null);
-		testConference.addReviewer("johndoe");
-		testConference.addReviewer("janedoe");
-		testConference.addReviewer("johnnyMcJohnnyface");
-		
-		List<Reviewer> reviewerList = testConference.getReviewers();
+		List<Reviewer> reviewerList = simpleConference.getReviewers();
 		
 		assertTrue(reviewerList.size() == 3);
 		
 		for (Reviewer r : reviewerList) {
-		    assertTrue(r.getUser().equals("johndoe") || r.getUser().equals("janedoe") || r.getUser().equals("johnnyMcJohnnyface"));
+		    assertTrue(r.getUser().equals("reviewer1") || r.getUser().equals("reviewer2") || r.getUser().equals("reviewer3"));
 		}
 	}
 	
