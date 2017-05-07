@@ -155,6 +155,7 @@ public class AuthorActions extends Throwable {
 		return true;
 	}
 	/**
+    * I think ian already covered this part with his edit code.
 	 * Allows logged in user to edit paper if they are the user who submitted it.
 	 * @author Ian Jury
 	 * @param info information of the person attempting to edit their papers
