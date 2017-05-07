@@ -38,7 +38,7 @@ public class SubProgramChairActions {
         out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
         //int userPaperChoice = in.nextInt();
         Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
-        if (userPaperChoice > papers.size()) {
+        if (userPaperChoice > papers.size() || userPaperChoice == null) {
         	out.println();
         	out.println("Could not find paper at index " + userPaperChoice + "!");
         }
@@ -55,7 +55,7 @@ public class SubProgramChairActions {
         	
         	//int userReviewerChoice = in.nextInt();
         	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-            if (userReviewerChoice > allReviewers.size()) {
+            if (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
             	out.println();
             	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
             }
@@ -101,7 +101,7 @@ public class SubProgramChairActions {
     	
     	//int userReviewerChoice = in.nextInt();
     	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-        if (userReviewerChoice > allReviewers.size()) {
+        if (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
         	out.println();
         	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
         }
@@ -126,7 +126,7 @@ public class SubProgramChairActions {
         	//int userPaperChoice = in.nextInt();
         	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         	
-        	if (userPaperChoice > papersToBeReviewed.size()) {
+        	if (userPaperChoice > papersToBeReviewed.size() || userPaperChoice == null) {
         		out.println();
             	out.println("Could not find Paper at index " + userReviewerChoice + "!");
             }
