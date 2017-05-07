@@ -242,7 +242,7 @@ public class AuthorActions extends Throwable {
 
         //gets user input and validates
         Integer choice = checkIfValidIntegerInput(input.nextLine());
-        if (choice > papersSubmittedByAuthor.size() + 1 || choice == null) {
+        if (choice > papersSubmittedByAuthor.size() || choice == null) {
 			info.out.println("Could not find choice");
 		} 
 		
