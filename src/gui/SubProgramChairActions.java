@@ -32,10 +32,10 @@ public class SubProgramChairActions {
         List<Paper> papers = rc.getSubProgramChairRole().getPapers();
         
         out.println();
-        out.println("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
         for (int i = 0; i < papers.size(); i++) {
         	out.println("\t" + (i+1) + ". " + papers.get(i).getTitle());
         }
+        out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
         //int userPaperChoice = in.nextInt();
         Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         if (userPaperChoice > papers.size()) {
@@ -46,12 +46,12 @@ public class SubProgramChairActions {
         else if (userPaperChoice != 0) {
         	out.println();
         	out.println("Paper Title: " + papers.get(userPaperChoice-1).getTitle());
-        	out.println("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
         	List<Reviewer> allReviewers = currentConference.getReviewers();
         	for (int i = 0; i < allReviewers.size(); i++) {
             	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
             }
+        	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
         	//int userReviewerChoice = in.nextInt();
         	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
@@ -82,12 +82,13 @@ public class SubProgramChairActions {
         Scanner in = info.in;
         Conference currentConference = info.getCurrentConference();
         out.println();
-        out.println("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
 		
         List<Reviewer> allReviewers = currentConference.getReviewers();
     	for (int i = 0; i < allReviewers.size(); i++) {
         	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
         }
+    	
+    	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
     	
     	//int userReviewerChoice = in.nextInt();
     	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
@@ -101,10 +102,10 @@ public class SubProgramChairActions {
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
         	out.println();
         	out.println("Reviewer: " + reviewer.getUser());
-        	out.println("Enter the associated number of the Paper you want to remove from this Reviewer (or 0 to cancel): ");
         	for (int i = 0; i < papersToBeReviewed.size(); i++) {
         		out.println("\t" + (i+1) + ". " + papersToBeReviewed.get(i).getTitle());
         	}
+        	out.print("Enter the associated number of the Paper you want to remove from this Reviewer (or 0 to cancel): ");
         	
         	//int userPaperChoice = in.nextInt();
         	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
@@ -128,9 +129,9 @@ public class SubProgramChairActions {
 	 * Helper method to determine that the user entered a valid integer.
 	 * @author Ian Jury
 	 * @param userInput The string read from the input source
-	 * @return null if input is invalid, otherwise it returns an integer (primitive)
-	 */
-	private static int checkIfValidIntegerInput(String userInput) {
+	 * @return null if input is invalid, otherwise it returns an Integer
+	 */// changed to return Integer (not primitive) by zach
+	private static Integer checkIfValidIntegerInput(String userInput) {
 		Integer choice;
 		try {
 			choice = Integer.parseInt(userInput);			

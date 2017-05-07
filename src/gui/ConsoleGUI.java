@@ -258,7 +258,7 @@ public class ConsoleGUI {
             List<Paper> papers = info.getCurrentConference().getPapers(rc.getAuthorRole());
             
             if (papers.isEmpty()) {
-                info.out.println("As an Author, You have not submitted any papers!");
+                info.out.println("As an Author, You don't have any submitted papers!");
             } else {
                 List<Paper> submitted = new LinkedList<>();
                 List<Paper> coauthored = new LinkedList<>();
@@ -323,6 +323,7 @@ public class ConsoleGUI {
      * @return if we displayed anything to the user.
      */
     private static boolean displaySubProgramChairInfo(UserInfo info) {
+        // TODO display who has been assigned to what
         RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         
         if (rc.isSubProgramChair) {

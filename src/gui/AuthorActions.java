@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -34,37 +35,55 @@ public class AuthorActions extends Throwable {
 		Set<String> users = SerializationHelper.loadUsers();
 		List<Author> theCoAuthors = new LinkedList<>();
 		Author currentAuthor = currentConference.getAuthor(info.username);
+		if (currentAuthor == null) {
+		    currentConference.addAuthor(info.username);
+		    currentAuthor = currentConference.getAuthor(info.username);
+		    
+		    if (currentAuthor == null) {
+		        throw new IllegalStateException("Error, Conference didn't return the author that was added.");
+		    }
+		}
+		
 		theCoAuthors.add(currentAuthor);
-		output.println("Enter the file path of the paper:");
+		
+		output.print("Enter the file path of the paper:");
 		String filePath = input.nextLine();
+		
 		while (!isValidPath(filePath)) {
 			// I need to make a option where the user can exit this and go back
 			// to the conference screen.
 			System.out.println("The file could not be found from the designated file path, please try again.");
+	        output.print("Enter the file path of the paper:");
 			filePath = input.nextLine();
 		}
-		output.println("Enter the title of the paper:");
+		
+		output.print("Enter the title of the paper:");
 		String paperTitle = input.nextLine();
+		
 		Integer choice = -1;
 		do {
 			// This will be done possibly by checkmarking in the future.
 			// For the terminal would it be better to simply have a for loop of
 			// the other users and have the user input the number/index?
+		    output.println();
 			output.println("0: Add a Co-Author to the paper (by username).");
-			output.println("1: If they're no Co-authors or none left to add.");
+			output.println("1: If there are no Co-authors or none left to add.");//TODO could be better worded
+			
 			// This will possibly already be shown in the gui in the future. I
 			// think we need a way to show the real names aswell.
-			output.println("2: To Display Current Users registered on the System.");
+			output.println("2: To Display Current Authors registered in the System.");
 			output.print("Enter choice: ");
+			
 			// I have to create a new scanner because printStream caused a bug.
-			Scanner scan = new Scanner(System.in);
-			choice = scan.nextInt();
+			choice = ConsoleGUI.getNumberInput(info);
 
 			if (choice.equals(0)) {
-				output.println("Enter the username of the Co-author:");
+				output.print("Enter the username of the Co-author: ");
 				String coAuthorUserName = input.nextLine().trim().toUpperCase();
+				
 				if (users.contains(coAuthorUserName) && coAuthorUserName != info.getUserName()) {
 					currentConference.addAuthor(coAuthorUserName);
+					
 					// Makes the author the user.
 					Author userNameInitAsAuthor = currentConference.getAuthor(coAuthorUserName);
 					theCoAuthors.add(userNameInitAsAuthor);
@@ -78,26 +97,32 @@ public class AuthorActions extends Throwable {
 				}
 			} else if (choice.equals(2)) {
 				// This prints out all the other users in the terminal
+			    output.println();
 				info.getOtherUsers().stream().forEach(output::println);
 			}
-
 		} while (!choice.equals(1));
+		
 		Paper conferenceSubmission = new Paper(Paths.get(filePath), theCoAuthors, paperTitle, currentAuthor);
+		
 		// Need to display the co authors and authors to the paper.
-		output.println("You are about to submit the paper: " + conferenceSubmission.getTitle() + " Proceed? (Yes/No)");
-		Scanner lastStep = new Scanner(System.in);
-		String ans = lastStep.nextLine().trim().toUpperCase();
+		output.print("You are about to submit the paper: \"" + conferenceSubmission.getTitle() + "\" Proceed? (Yes/No): ");
+		String ans = input.nextLine().trim().toUpperCase();
 
 		if (ans.equals("YES") || ans.equals("Y")) {
-			currentConference.submitPaper(conferenceSubmission);
-			output.println("Submitted!");
-			ConsoleGUI.dashBoard(info);
+			boolean submitted = currentConference.submitPaper(conferenceSubmission);
+			
+			if (submitted) {
+			    output.println("Submitted!");			    
+			} else {
+			    output.println("Error, one of the co-authors is at the max number of papers!");//TODO not sure if this is the only error possible.
+			}
+			
+			//ConsoleGUI.dashBoard(info);
 		} else {
 			// Restarts from the beginning. In the future the user will have a
 			// opportunity to go back to the dashboard at anytime.
-			ConsoleGUI.dashBoard(info);
+			//ConsoleGUI.dashBoard(info);
 		}
-		lastStep.close();
 	}
 	/**
 	 * This code removes the paper from the conference
@@ -122,11 +147,12 @@ public class AuthorActions extends Throwable {
 		}
 		int command = 1;
 		// displays list of all papers the author has submitted
-		output.println("Enter the associated number of the paper you want to remove (or 0 to cancel): ");
+		output.println("Submitted Papers:");
 		for (int idx = 0; idx < papersSubmittedByAuthor.size(); idx++) {
 			output.println(command + ". " + papersSubmittedByAuthor.get(idx).getTitle());
 			command++; // increments command #
 		}
+		output.print("Enter the associated number of the paper you want to remove (or 0 to cancel): ");
 		// gets user input and validates
 		Integer choice = checkIfValidIntegerInput(input.nextLine());
 		if (choice > papersSubmittedByAuthor.size() + 1 || choice == null) {
@@ -147,12 +173,15 @@ public class AuthorActions extends Throwable {
 	 * @return if the file could be found
 	 */
 	public static boolean isValidPath(String filePath) {
+	    File theFile = null;
+	    
 		try {
-			Paths.get(filePath);
+			theFile = Paths.get(filePath).toFile();
 		} catch (InvalidPathException | NullPointerException ex) {
 			return false;
 		}
-		return true;
+		
+		return theFile.exists() && !theFile.isDirectory();
 	}
 	/**
     * I think ian already covered this part with his edit code.
@@ -180,13 +209,16 @@ public class AuthorActions extends Throwable {
         		papersSubmittedByAuthor.add(paperWrittenByAuthor);
         	}
         }
+        
+
+        output.println("\nSubmitted Papers:");
         int command = 1;
         //displays list of all papers the author has submitted
-        output.println("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
         for (int idx = 0; idx < papersSubmittedByAuthor.size(); idx++) {
-        	output.println(command + ". " + papersSubmittedByAuthor.get(idx).getTitle()); 
+        	output.println(command + ": " + papersSubmittedByAuthor.get(idx).getTitle()); 
         	command++;		//increments command #
         }
+        output.print("Enter the associated number of the paper you want to edit (or 0 to cancel): ");
         
 
         //gets user input and validates
@@ -200,15 +232,16 @@ public class AuthorActions extends Throwable {
         	Paper paperToEdit = papersSubmittedByAuthor.get(choice);
         	Integer userDecision = 0;
         	do {
-	        	output.println("Enter the associated number of the information you want to edit: ");
-	        	output.println("CURRENTLY EDITING: " + paperToEdit.getTitle());
+        	    output.println();
+	        	output.println("Currently Editing: " + paperToEdit.getTitle());
 	        	output.println("0. Exit paper editor");
 	        	output.println("1. Change file path");
 	        	output.println("2. Change list of authors");
 	        	output.println("3. Change title of paper");
+	        	output.print("Enter the associated number of the information you want to edit: ");
 	        	userDecision = checkIfValidIntegerInput(input.nextLine());
 	        	
-	        	//this code is really lame, going to fix it later
+	        	//this code is really lame, going to fix it later TODO
 	        	//doesn't check for invalid inputs yet
 	        	if (userDecision.equals(1)) {	//user changes file path
 	        		output.println("Enter new file path: ");
@@ -223,7 +256,7 @@ public class AuthorActions extends Throwable {
 	        		System.out.println("File path has been changed to: " + newFilePath.toString());
 	        		
 	        	} else if (userDecision.equals(2)) { //user changes list of authors
-	        		output.println("Enter new author names,  ");
+	        		output.print("Enter new author names: ");
 	        		String newAuthorNames = input.nextLine();
 	        		//splits to whitespace
 	        		List<String> stringListOfAuthors = Arrays.asList(newAuthorNames.split("\\s*,\\s*"));
@@ -240,14 +273,14 @@ public class AuthorActions extends Throwable {
 	        		
 	        		
 	        	} else if (userDecision.equals(3)) { //user changes 
-	        		output.println("Enter new title of paper: ");
+	        		output.print("Enter new title of paper: ");
 	        		String newTitleOfPaper = input.nextLine();
 	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), paperToEdit.getAuthors(), 
 	        				newTitleOfPaper, paperToEdit.getTheSubmitter());
 	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
 	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 	        		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
-	        		System.out.println("NOTE! Exit paper editor (press 0) for changes to display here");
+	        		System.out.println("NOTE! Exit paper editor (0) for changes to display here");// TODO kinda unclear what is happening here -zach
 	        		
 	        	}
 	        	//checks if input is invalid. If so it re-prompts user
