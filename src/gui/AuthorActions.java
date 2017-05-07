@@ -194,8 +194,7 @@ public class AuthorActions extends Throwable {
         PrintStream output = info.out;
         Scanner input = info.in;
         Conference currentConference = info.getCurrentConference();
-        Author currentAuthor = currentConference.getAuthor(info.username);
-        
+        Author currentAuthor = currentConference.getAuthor(info.username);       
         
        //gets list of papers -note that these are just ones where the user is an author
         List<Paper> papersThatContainCurrentAuthor = currentConference.getPapers
