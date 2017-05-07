@@ -61,9 +61,12 @@ public class Reviewer extends AbstractRole {
                 authorIsDifferent = false;
             }
         }
+        
         if (authorIsDifferent && !isAtPaperLimit()) {
-            numberOfReviews++;
-            papersToBeReviewed.add(p);
+            if (!papersToBeReviewed.contains(p)) {
+                numberOfReviews++;
+                papersToBeReviewed.add(p);                
+            }
         }
         
         return authorIsDifferent && !isAtPaperLimit();

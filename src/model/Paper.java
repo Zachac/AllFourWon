@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.List;
 
@@ -16,9 +17,13 @@ public class Paper implements Serializable {
      * 
      */
     private static final long serialVersionUID = -7258827148995367406L;
-    private Path theFilePath;
+    
+    private String stringFilePath;
+    
+    transient private Path theFilePath;
     //We don't need a setter for this right? Since it's handled in the GUI.
     private String thePaperTitle;
+    
     private List<Author> theAuthorNames;
     //The date class gets the specified time of the submission down to milliseconds.
     private Date theSubmissionDate;
@@ -38,6 +43,8 @@ public class Paper implements Serializable {
         theAuthorNames = theAuthors;
         theSubmitter = submitter;
         theSubmissionDate = new Date();
+
+        stringFilePath = (filePath == null) ? null : filePath.toString();
     }
     
     /**
@@ -63,7 +70,10 @@ public class Paper implements Serializable {
      * @return the path of the paper
      */
     public Path getDocumentPath() {
-        //Is this sufficient? This returns the entire path name from the file.
+        if (theFilePath == null && stringFilePath != null) {
+            theFilePath = Paths.get(stringFilePath);
+        }
+        
         return theFilePath;
     }
     /**
