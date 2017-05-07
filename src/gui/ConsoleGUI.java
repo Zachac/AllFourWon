@@ -106,7 +106,7 @@ public class ConsoleGUI {
 		
 		if (choice == null) {
 			info.out.println("Invalid input.");			
-		} else if (choice > conferences.length + 1 || choice < 0) {
+		} else if (choice > conferences.length || choice < 0) {
 			info.out.println("Sorry, we couldn't find that option.");
 		} else if (choice == 0) {
 			shouldContinue = false;

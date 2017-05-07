@@ -43,7 +43,6 @@ public class Paper implements Serializable {
         theAuthorNames = theAuthors;
         theSubmitter = submitter;
         theSubmissionDate = new Date();
-
         stringFilePath = (filePath == null) ? null : filePath.toString();
     }
     
