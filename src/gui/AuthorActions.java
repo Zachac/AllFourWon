@@ -126,6 +126,15 @@ public class AuthorActions extends Throwable {
 	}
 	/**
 	 * This code removes the paper from the conference
+	 * 
+	 *  * Preconditions: 
+	 * 		The user info and all related fields must be valid
+	 * 		All author information must be valid
+	 * 		The user calling this method must be the one who submitted the paper
+	 *  	It must not be past the conference's submission deadline
+	 * Postconditions: 
+	 * 		The specified paper will be removed from the conference
+	 * 
 	 * @author Ian Jury
 	 * @param info information of the user trying to remove a paper.
 	 */
@@ -161,6 +170,9 @@ public class AuthorActions extends Throwable {
 			choice--;// account for offset
 			Paper paperToRemove = papersSubmittedByAuthor.get(choice);
 			currentConference.removePaper(paperToRemove);
+			output.println("The paper \"" + paperToRemove.getTitle() + "\" has successfully been removed.");
+		} else { //if they enter a negative number or something
+			output.println("Invalid input.");
 		}
 	}
 
@@ -188,9 +200,13 @@ public class AuthorActions extends Throwable {
 	 * 
 	 * Preconditions: 
 	 * 		The user info and all related fields must be valid
+	 * 		All author information must be valid
+	 * 		The user calling this method must be the one who submitted the paper
 	 *  	It must not be past the conference's submission deadline
 	 * Postconditions: 
-	 * 		The author can change the fields they want to 
+	 * 		The author can change the fields they want to
+	 * 		The newly edited paper will be added to the conference
+	 * 		The old information about the paper will be removed 
 	 * @author Ian Jury
 	 * @param info information of the person attempting to edit their papers
 	 */
