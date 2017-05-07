@@ -77,15 +77,24 @@ public class SubProgramChairActions {
 	 * @param info UserInfo object of the Subprogram chair
 	 */
 	public static void removeReviewer(UserInfo info) {
-		
+	    RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.getUserName()));
+	    List<Paper> assignedPapers = rc.getSubProgramChairRole().getPapers();
+	    
 		PrintStream out = info.out;
         Scanner in = info.in;
         Conference currentConference = info.getCurrentConference();
         out.println();
 		
         List<Reviewer> allReviewers = currentConference.getReviewers();
+        for (Reviewer r : allReviewers) {
+            if (!ConsoleGUI.isReviewerFor(rc.getSubProgramChairRole(), r)) {   
+                allReviewers.remove(r);
+            }
+        }
+        
+        
     	for (int i = 0; i < allReviewers.size(); i++) {
-        	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
+	        out.println("\t" + (i+1) + ": " + allReviewers.get(i).getUser());
         }
     	
     	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
@@ -100,6 +109,13 @@ public class SubProgramChairActions {
         else if (userReviewerChoice != 0) {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
+        	
+        	for (Paper p : papersToBeReviewed) {
+        	    if (!assignedPapers.contains(p)) {
+        	        papersToBeReviewed.remove(p);
+        	    }
+        	}
+        	
         	out.println();
         	out.println("Reviewer: " + reviewer.getUser());
         	for (int i = 0; i < papersToBeReviewed.size(); i++) {

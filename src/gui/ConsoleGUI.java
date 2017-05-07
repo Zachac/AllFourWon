@@ -10,7 +10,9 @@ import java.util.Set;
 import model.Conference;
 import model.ConferenceManager;
 import model.Paper;
+import model.Reviewer;
 import model.RolesChecker;
+import model.SubProgramChair;
 
 /**
  * The main console user interface.
@@ -93,7 +95,7 @@ public class ConsoleGUI {
 		            info.out.printf("%d: %-15s (%-15s)\n", 
 		                    i+1, conferences[i].name, conferences[i].getDeadline());				
 		        } else {
-		            info.out.printf("%d: %-15s (CLOSED)\n",
+		            info.out.printf("%d: %-15s (Submissions Closed)\n",
 		                    i+1, conferences[i].name);
 		        }
 		    }		    
@@ -323,7 +325,6 @@ public class ConsoleGUI {
      * @return if we displayed anything to the user.
      */
     private static boolean displaySubProgramChairInfo(UserInfo info) {
-        // TODO display who has been assigned to what
         RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         
         if (rc.isSubProgramChair) {
@@ -338,9 +339,47 @@ public class ConsoleGUI {
                     info.out.printf("    %-30.30s (%s)\n", p.getTitle(), p.getSubmissionDate().toString());
                 }
             }
+
+            info.out.println("You have assigned ");
+            boolean assignedAnybod = false;
+            for (Reviewer r : info.getCurrentConference().getReviewers()) {
+                if (isReviewerFor(rc.getSubProgramChairRole(), r)) {
+                    for (Paper p : r.getPapersToBeReviewed()) {
+                        if (assignedPapers.contains(p)) {
+                            info.out.printf("    %s to %s\n", r.getUser(), p.getTitle());   
+                            assignedAnybod = true;
+                        }
+                    }
+                }
+            }
+            
+            if (!assignedAnybod) {
+                info.out.println("    nobody yet");
+            }
         }
         
+        
         return rc.isSubProgramChair;
+    }
+    
+    /**
+     * Check if theReviewer is reviewing one of the papers from theSubChair
+     * @param theSubChair the sub program chair who might have assigned the paper.
+     * @param theReviewer the reviewer who we are checking if they were assigned by theSubChair
+     * @return if the reviewer is reviewing one of theSubChair's papers.
+     */
+    public static boolean isReviewerFor(SubProgramChair theSubChair, Reviewer theReviewer) {
+        
+        List<Paper> reviewerPapers = theReviewer.getPapersToBeReviewed();
+        List<Paper> subchairPapers = theSubChair.getPapers();
+        
+        for (Paper p : subchairPapers) {
+            if (reviewerPapers.contains(p)) {
+                return true;
+            }
+        }
+        
+        return false;
     }
 	
 }

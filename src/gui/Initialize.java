@@ -24,6 +24,7 @@ public class Initialize {
         users.add("IANJ");
         users.add("KVN96");
         users.add("DIMABLIZ");
+        users.add("BRIANG5");
         
         s.addConference(getBeforeDeadlineConference());
         s.addConference(getAfterDeadlineConference());        
@@ -54,9 +55,11 @@ public class Initialize {
         afterDeadlineConference.addAuthor("ZACHAC");
         afterDeadlineConference.addSubprogramChair("KVN96");
         afterDeadlineConference.addReviewer("DIMABLIZ");
+        afterDeadlineConference.addReviewer("BRIANG5");
         
         SubProgramChair kevin = new RolesChecker(afterDeadlineConference.getRoles("KVN96")).getSubProgramChairRole();
         Reviewer dima = new RolesChecker(afterDeadlineConference.getRoles("DIMABLIZ")).getReviewerRole();
+        Reviewer brian = new RolesChecker(afterDeadlineConference.getRoles("BRIANG5")).getReviewerRole();
         Author zach = afterDeadlineConference.getAuthor("ZACHAC");
         
         List<Author> authors = new LinkedList<>();
@@ -65,13 +68,12 @@ public class Initialize {
         Paper p = new Paper(null, authors, "Constructing Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
         kevin.addPaper(p);
-        dima.assign(p);
+        
 
         p = new Paper(null, authors, "Detecting Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
-        kevin.addPaper(p);
-        dima.assign(p);
-
+        brian.assign(p);
+        
         p = new Paper(null, authors, "Analyzing Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
         kevin.addPaper(p);
