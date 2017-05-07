@@ -194,8 +194,7 @@ public class AuthorActions extends Throwable {
         PrintStream output = info.out;
         Scanner input = info.in;
         Conference currentConference = info.getCurrentConference();
-        Author currentAuthor = currentConference.getAuthor(info.username);
-        
+        Author currentAuthor = currentConference.getAuthor(info.username);       
         
        //gets list of papers -note that these are just ones where the user is an author
         List<Paper> papersThatContainCurrentAuthor = currentConference.getPapers
@@ -267,10 +266,15 @@ public class AuthorActions extends Throwable {
 	        		}
 	        		Paper editedPaper = new Paper(paperToEdit.getDocumentPath(), newListOfAuthors, 
 	        				paperToEdit.getTitle(), paperToEdit.getTheSubmitter());
-	        		info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
-	        		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
-	        		System.out.println("Author list has been changed!");
 	        		
+	        		if (info.getCurrentConference().submitPaper(editedPaper) == false) { //add the edited paper
+	        			//if the paper couldn't be submitted because an author was invalid/ not part of conference
+	        			output.println("The editing of authors was not possible because one of the usernames " + 
+	        			"you entered is not valid for the current conference.\nNo changes were made. Please try again.\n");
+	        		} else {
+	        			info.getCurrentConference().removePaper(paperToEdit); //remove the old paper
+	        			System.out.println("Author list has been changed!");
+	        		}
 	        		
 	        	} else if (userDecision.equals(3)) { //user changes 
 	        		output.print("Enter new title of paper: ");
