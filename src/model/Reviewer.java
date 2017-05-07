@@ -93,5 +93,23 @@ public class Reviewer extends AbstractRole {
     public List<Paper> getPapersToBeReviewed() {
         return new LinkedList<>(papersToBeReviewed);
     }
+    
+    /**
+     * Removes a Paper from the Papers that the Reviewer is to review.
+     * 
+     * @param p Paper to be removed.
+     * @return true if paper found and removed, false otherwise
+     */
+    public boolean removePaper(Paper p) {
+    	boolean paperFound = false;
+    	for (int i = 0; i < papersToBeReviewed.size(); i++) {
+    		if(p.getTitle().equals(papersToBeReviewed.get(i).getTitle())) {
+    			paperFound = true;
+    			papersToBeReviewed.remove(i);
+    			break;
+    		}
+    	}
+    	return paperFound;
+    }
 
 }
