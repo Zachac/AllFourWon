@@ -184,8 +184,13 @@ public class AuthorActions extends Throwable {
 		return theFile.exists() && !theFile.isDirectory();
 	}
 	/**
-    * I think ian already covered this part with his edit code.
-	 * Allows logged in user to edit paper if they are the user who submitted it.
+	 * Allows logged in user to edit a paper if they are the user who submitted it.
+	 * 
+	 * Preconditions: 
+	 * 		The user info and all related fields must be valid
+	 *  	It must not be past the conference's submission deadline
+	 * Postconditions: 
+	 * 		The author can change the fields they want to 
 	 * @author Ian Jury
 	 * @param info information of the person attempting to edit their papers
 	 */
@@ -262,8 +267,17 @@ public class AuthorActions extends Throwable {
 	/**
 	 * Takes the old paper and returns a new paper object with a new file path
 	 * specified by the user.
+	 * 
+	 * Preconditions:
+	 *  	It must not be past the conference's submission deadline 
+	 * 		All authors must be valid for the specific conference
+	 * 		The user info and all related fields must be valid
+	 * Postconditions: 
+	 * 		A new paper object will be returned with a new file path
+	 * 		The new paper object will be submitted to the conference
+	 * 		The old paper object will be removed from the conference 
 	 * @author Ian Jury
-	 * @param theOriginalPaper
+	 * @param theOriginalPaper the original paper object
 	 * @return the new paper object
 	 */
 	private static Paper changeFilePathOfPaper(Paper theOriginalPaper, UserInfo info) {
@@ -272,8 +286,7 @@ public class AuthorActions extends Throwable {
 		
 		Paper editedPaper = new Paper(newFilePath, theOriginalPaper.getAuthors(), 
 				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
-		//TODO check if the deadline has passed so a paper wont just be removed and then 
-		//fail to be submitted?
+
 		info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
 		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
 		System.out.println("File path has been changed to: " + newFilePath.toString());
@@ -283,9 +296,17 @@ public class AuthorActions extends Throwable {
 	/**
 	 * Takes the old paper and returns a new paper object with a new list of authors
 	 * specified by the user.
-	 * Preconditions: All authors must be valid for the specific conference
+	 * 
+	 * Preconditions: 
+	 * 		It must not be past the conference's submission deadline
+	 * 		All authors must be valid for the specific conference
+	 * 		The user info and all related fields must be valid
+	 * Postconditions: 
+	 * 		The new paper object will be submitted to the conference
+	 * 		The old paper object will be removed from the conference
 	 * @author Ian Jury
 	 * @param theOriginalPaper
+	 * @return the new paper object
 	 */
 	private static Paper changeAuthorsOfPaper(Paper theOriginalPaper, UserInfo info) {
 		info.out.print("Enter new author names: ");
@@ -315,6 +336,14 @@ public class AuthorActions extends Throwable {
 	/**
 	 * Takes the old paper and returns a new paper object with a new title
 	 * specified by the user.
+	 * Preconditions: 
+	 * 		The Paper must be a valid paper object for the conference
+	 *  	The user info and all related fields must be valid
+	 * Postconditions:
+	 * 		A new paper with a new title will be returned(but the other fields will stay the same)
+	 * 		The new paper object will be submitted to the conference
+	 * 		The old paper object will be removed from the conference
+	 * 
 	 * @author Ian Jury
 	 * @param theOriginalPaper
 	 */
