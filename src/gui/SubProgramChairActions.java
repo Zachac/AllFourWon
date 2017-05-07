@@ -36,8 +36,9 @@ public class SubProgramChairActions {
         for (int i = 0; i < papers.size(); i++) {
         	out.println("\t" + (i+1) + ". " + papers.get(i).getTitle());
         }
-        int userPaperChoice = in.nextInt();
-        if (userPaperChoice > papers.size() + 1) {
+        //int userPaperChoice = in.nextInt();
+        Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
+        if (userPaperChoice > papers.size()) {
         	out.println();
         	out.println("Could not find paper at index " + userPaperChoice + "!");
         }
@@ -52,8 +53,9 @@ public class SubProgramChairActions {
             	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
             }
         	
-        	int userReviewerChoice = in.nextInt();
-            if (userReviewerChoice > allReviewers.size() + 1) {
+        	//int userReviewerChoice = in.nextInt();
+        	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+            if (userReviewerChoice > allReviewers.size()) {
             	out.println();
             	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
             }
@@ -87,8 +89,9 @@ public class SubProgramChairActions {
         	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
         }
     	
-    	int userReviewerChoice = in.nextInt();
-        if (userReviewerChoice > allReviewers.size() + 1) {
+    	//int userReviewerChoice = in.nextInt();
+    	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+        if (userReviewerChoice > allReviewers.size()) {
         	out.println();
         	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
         }
@@ -103,9 +106,10 @@ public class SubProgramChairActions {
         		out.println("\t" + (i+1) + ". " + papersToBeReviewed.get(i).getTitle());
         	}
         	
-        	int userPaperChoice = in.nextInt();
+        	//int userPaperChoice = in.nextInt();
+        	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         	
-        	if (userPaperChoice > papersToBeReviewed.size() + 1) {
+        	if (userPaperChoice > papersToBeReviewed.size()) {
         		out.println();
             	out.println("Could not find Paper at index " + userReviewerChoice + "!");
             }
@@ -118,5 +122,21 @@ public class SubProgramChairActions {
         	}
         }
 		
+	}
+	
+	/**
+	 * Helper method to determine that the user entered a valid integer.
+	 * @author Ian Jury
+	 * @param userInput The string read from the input source
+	 * @return null if input is invalid, otherwise it returns an integer (primitive)
+	 */
+	private static int checkIfValidIntegerInput(String userInput) {
+		Integer choice;
+		try {
+			choice = Integer.parseInt(userInput);			
+		} catch (NumberFormatException e) { 
+			choice = null;
+		}
+		return choice;
 	}
 }
