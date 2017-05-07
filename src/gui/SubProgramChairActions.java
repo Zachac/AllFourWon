@@ -9,8 +9,20 @@ import model.Paper;
 import model.Reviewer;
 import model.RolesChecker;
 
+/**
+ * Class to guide a Subprogram chair through their actions such as assigning a Reviewer
+ * to a paper using a UI.
+ * 
+ * @author Dmitriy Bliznyuk
+ *
+ */
 public class SubProgramChairActions {
 	
+	/**
+	 * UI method to assign a Reviewer to a Paper
+	 * 
+	 * @param info UserInfo object of the Subprogram chair
+	 */
 	public static void assignReviewer(UserInfo info) {
 		PrintStream out = info.out;
         Scanner in = info.in;
@@ -52,6 +64,11 @@ public class SubProgramChairActions {
 	}
 
 	
+	/**
+	 * UI method to remove a Reviewer from a Paper
+	 * 
+	 * @param info UserInfo object of the Subprogram chair
+	 */
 	public static void removeReviewer(UserInfo info) {
 		
 		PrintStream out = info.out;
