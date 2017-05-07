@@ -298,16 +298,22 @@ public class AuthorActions extends Throwable {
 	 */
 	private static Paper changeFilePathOfPaper(Paper theOriginalPaper, UserInfo info) {
 		info.out.println("Enter new file path: ");
-		Path newFilePath = Paths.get(info.in.nextLine());
+		String userInputPath = info.in.nextLine();
 		
-		Paper editedPaper = new Paper(newFilePath, theOriginalPaper.getAuthors(), 
-				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
+		if (isValidPath(userInputPath)) {
+			Path newFilePath = Paths.get(info.in.nextLine());
+			Paper editedPaper = new Paper(newFilePath, theOriginalPaper.getAuthors(), 
+					theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
 
-		info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
-		info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
-		System.out.println("File path has been changed to: " + newFilePath.toString());
-		return editedPaper;
-		
+			info.getCurrentConference().removePaper(theOriginalPaper); //remove the old paper
+			info.getCurrentConference().submitPaper(editedPaper); //add the edited paper
+			System.out.println("File path has been changed to: " + newFilePath.toString());
+			return editedPaper;
+		} else {
+			info.out.println("Invalid file path. Path wasn't changed.");
+			return theOriginalPaper;
+		}
+				
 	}
 	/**
 	 * Takes the old paper and returns a new paper object with a new list of authors
@@ -325,15 +331,9 @@ public class AuthorActions extends Throwable {
 	 * @return the new paper object
 	 */
 	private static Paper changeAuthorsOfPaper(Paper theOriginalPaper, UserInfo info) {
-		info.out.print("Enter new author names: ");
-		String newAuthorNames = info.in.nextLine();
-		//splits to whitespace
-		List<String> stringListOfAuthors = Arrays.asList(newAuthorNames.split("\\s*,\\s*"));
-		List<Author> newListOfAuthors = new ArrayList<>();
-		//converts string of author names into new list of 'authors'
-		for(String authorName : stringListOfAuthors) {
-			newListOfAuthors.add(new Author(authorName));
-		}
+		
+		List<Author> newListOfAuthors = createNewListOfAuthorsOfPaper(info);
+		
 		Paper editedPaper = new Paper(theOriginalPaper.getDocumentPath(), newListOfAuthors, 
 				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
 		
@@ -373,6 +373,66 @@ public class AuthorActions extends Throwable {
 		System.out.println("Paper title has been changed to: " + newTitleOfPaper);
 		return editedPaper;
 		
+	}
+	
+	/**
+	 * Kevin, I stole this from your code in submitPaper to use when editing authors
+	 * You could probably use this later when refactoring too if you want
+	 * 
+	 * Takes the user info and returns a new list of authors from the user's input
+	 * 
+	 * @author Kevin Nguyen
+	 * @param info the information of the user
+	 * @return the new list of authors
+	 */
+	private static List<Author> createNewListOfAuthorsOfPaper(UserInfo info) {
+		PrintStream output = info.out;
+		Scanner input = info.in;
+		Integer choice = -1;
+		Set<String> users = SerializationHelper.loadUsers();
+		Conference currentConference = info.getCurrentConference();
+		List<Author> theCoAuthors = new LinkedList<>();
+		do {
+			// This will be done possibly by checkmarking in the future.
+			// For the terminal would it be better to simply have a for loop of
+			// the other users and have the user input the number/index?
+		    output.println();
+			output.println("0: Add a Co-Author to the paper (by username).");
+			output.println("1: If there are no Co-authors or none left to add.");//TODO could be better worded
+			
+			// This will possibly already be shown in the gui in the future. I
+			// think we need a way to show the real names aswell.
+			output.println("2: To Display Current Authors registered in the System.");
+			output.print("Enter choice: ");
+			
+			// I have to create a new scanner because printStream caused a bug.
+			choice = ConsoleGUI.getNumberInput(info);
+
+			if (choice.equals(0)) {
+				output.print("Enter the username of the Co-author: ");
+				String coAuthorUserName = input.nextLine().trim().toUpperCase();
+				
+				if (users.contains(coAuthorUserName) && coAuthorUserName != info.getUserName()) {
+					currentConference.addAuthor(coAuthorUserName);
+					
+					// Makes the author the user.
+					Author userNameInitAsAuthor = currentConference.getAuthor(coAuthorUserName);
+					theCoAuthors.add(userNameInitAsAuthor);
+					output.println(coAuthorUserName + " Added as a Co-Author.");
+				} else {
+					// For confidentiality purposes the author cannot register
+					// for co authors. We can change this however if you guys
+					// want.
+					output.println(
+							"Username not found. If the username you're looking for doesn't exist inform the Co-Author to register and add him/her back in later.");
+				}
+			} else if (choice.equals(2)) {
+				// This prints out all the other users in the terminal
+			    output.println();
+				info.getOtherUsers().stream().forEach(output::println);
+			}
+		} while (!choice.equals(1));
+		return theCoAuthors;
 	}
 	
 	/**
