@@ -113,6 +113,7 @@ public class SubProgramChairActions {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
         	
+        	// Why is paper being removed here? - dmitriy
         	for (Paper p : papersToBeReviewed) {
         	    if (!assignedPapers.contains(p)) {
         	        papersToBeReviewed.remove(p);
