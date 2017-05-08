@@ -35,7 +35,6 @@ public class SubProgramChairActions {
         out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
 
         Integer userPaperChoice = getPaperIndexInput(out, in, papers);
-        
         if (userPaperChoice != 0) {
         	out.println();
         	out.println("Paper Title: " + papers.get(userPaperChoice-1).getTitle());
@@ -45,14 +44,16 @@ public class SubProgramChairActions {
         	printListOfReviewers(out, allReviewers);
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
-        	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-            while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0) {
-            	out.println();
-            	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
-            	printListOfReviewers(out, allReviewers);
-            	out.println("Please enter another value (or 0 to cancel): ");
-            	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-            }
+//        	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+//            while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0) {
+//            	out.println();
+//            	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+//            	printListOfReviewers(out, allReviewers);
+//            	out.println("Please enter another value (or 0 to cancel): ");
+//            	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+//            }
+            
+            Integer userReviewerChoice = getReviewerIndexInput(out, in, allReviewers);
             
             if (userReviewerChoice != 0) {
             	allReviewers.get(userReviewerChoice - 1).assign(papers.get(userPaperChoice - 1));
@@ -89,14 +90,16 @@ public class SubProgramChairActions {
     	
     	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
     	
-    	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-        while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 ) {
-        	out.println();
-        	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
-        	printListOfReviewers(out, allReviewers);
-        	out.print("Please enter another value (or 0 to cancel): ");
-        	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-        }
+//    	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+//        while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0) {
+//        	out.println();
+//        	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+//        	printListOfReviewers(out, allReviewers);
+//        	out.print("Please enter another value (or 0 to cancel): ");
+//        	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+//        }
+    	
+    	Integer userReviewerChoice = getReviewerIndexInput(out, in, allReviewers);
         
         if (userReviewerChoice != 0) {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
@@ -131,7 +134,7 @@ public class SubProgramChairActions {
 	 * @param out PrintStream where to print prompts and paper list
 	 * @param in Scanner from which to get user's input
 	 * @param papers List of papers from which the user must choose
-	 * @return
+	 * @return int value of the paper user chose
 	 */
 	private static int getPaperIndexInput(PrintStream out, Scanner in, List<Paper> papers) {
 		Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());	
@@ -144,6 +147,27 @@ public class SubProgramChairActions {
         }
     	return userPaperChoice;
 	}
+	
+	/**
+	 * Private helper method to get user's input on which Reviewer they choose.
+	 * 
+	 * @param out PrintStream where to print prompts and Reviewer list
+	 * @param in Scanner from which to get user's input
+	 * @param reviewers List of Reviewers from which the user must choose
+	 * @return int value of the Reviewer user chose
+	 */
+	private static int getReviewerIndexInput(PrintStream out, Scanner in, List<Reviewer> reviewers) {
+		Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+        while (userReviewerChoice == null || userReviewerChoice > reviewers.size() || userReviewerChoice < 0) {
+        	out.println();
+        	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+        	printListOfReviewers(out, reviewers);
+        	out.println("Please enter another value (or 0 to cancel): ");
+        	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
+        }
+    	return userReviewerChoice;
+	}
+
 	
 	/**
 	 * Private helper method to print a list of papers.
