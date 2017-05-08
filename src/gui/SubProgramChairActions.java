@@ -31,15 +31,13 @@ public class SubProgramChairActions {
         RolesChecker rc = new RolesChecker(info.getCurrentConference().getRoles(info.username));
         List<Paper> papers = rc.getSubProgramChairRole().getPapers();
         
-        out.println();
-        for (int i = 0; i < papers.size(); i++) {
-        	out.println("\t" + (i+1) + ". " + papers.get(i).getTitle());
-        }
+        printListOfPapers(out, papers);
         out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
         Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         while (userPaperChoice > papers.size() || userPaperChoice < 0 || userPaperChoice == null) {
         	out.println();
         	out.println("Could not find paper at index " + userPaperChoice + "!");
+        	printListOfPapers(out, papers);
         	out.println("Please enter another value (or 0 to cancel): ");
         	userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         }
@@ -49,15 +47,15 @@ public class SubProgramChairActions {
         	out.println("Paper Title: " + papers.get(userPaperChoice-1).getTitle());
         	
         	List<Reviewer> allReviewers = currentConference.getReviewers();
-        	for (int i = 0; i < allReviewers.size(); i++) {
-            	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
-            }
+        	
+        	printListOfReviewers(out, allReviewers);
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
         	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
             while (userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 || userReviewerChoice == null) {
             	out.println();
             	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+            	printListOfReviewers(out, allReviewers);
             	out.println("Please enter another value (or 0 to cancel): ");
             	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
             }
@@ -71,7 +69,6 @@ public class SubProgramChairActions {
         }
         
 	}
-
 	
 	/**
 	 * UI method to remove a Reviewer from a Paper
@@ -94,9 +91,7 @@ public class SubProgramChairActions {
             }
         }
         
-    	for (int i = 0; i < allReviewers.size(); i++) {
-	        out.println("\t" + (i+1) + ": " + allReviewers.get(i).getUser());
-        }
+        printListOfReviewers(out, allReviewers);
     	
     	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
     	
@@ -104,6 +99,7 @@ public class SubProgramChairActions {
         while (userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 || userReviewerChoice == null) {
         	out.println();
         	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+        	printListOfReviewers(out, allReviewers);
         	out.println("Please enter another value (or 0 to cancel): ");
         	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
         }
@@ -112,7 +108,6 @@ public class SubProgramChairActions {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
         	
-        	// Why is paper being removed here? - dmitriy
         	for (Paper p : papersToBeReviewed) {
         	    if (!assignedPapers.contains(p)) {
         	        papersToBeReviewed.remove(p);
@@ -121,9 +116,7 @@ public class SubProgramChairActions {
         	
         	out.println();
         	out.println("Reviewer: " + reviewer.getUser());
-        	for (int i = 0; i < papersToBeReviewed.size(); i++) {
-        		out.println("\t" + (i+1) + ". " + papersToBeReviewed.get(i).getTitle());
-        	}
+        	printListOfPapers(out, papersToBeReviewed);
         	out.print("Enter the associated number of the Paper you want to remove from this Reviewer (or 0 to cancel): ");
         	
         	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
@@ -131,6 +124,7 @@ public class SubProgramChairActions {
         	while (userPaperChoice > papersToBeReviewed.size() || userPaperChoice < 0 || userPaperChoice == null) {
         		out.println();
             	out.println("Could not find Paper at index " + userPaperChoice + "!");
+            	printListOfPapers(out, papersToBeReviewed);
             	out.println("Please enter another value (or 0 to cancel): ");
             	userPaperChoice = checkIfValidIntegerInput(in.nextLine());
             }
@@ -143,6 +137,29 @@ public class SubProgramChairActions {
         	}
         }
 		
+	}
+	
+	/**
+	 * Private helper method to print a list of papers.
+	 * @param out PrintStream where to print the list
+	 * @param papers List of Papers to print
+	 */
+	private static void printListOfPapers(PrintStream out, List<Paper> papers) {
+		out.println();
+        for (int i = 0; i < papers.size(); i++) {
+        	out.println("\t" + (i+1) + ". " + papers.get(i).getTitle());
+        }
+	}
+	
+	/**
+	 * Private helper method to print a list of papers.
+	 * @param out PrintStream where to print the list
+	 * @param papers List of Papers to print
+	 */
+	private static void printListOfReviewers(PrintStream out, List<Reviewer> allReviewers) {
+		for (int i = 0; i < allReviewers.size(); i++) {
+        	out.println("\t" + (i+1) + ". " + allReviewers.get(i).getUser());
+        }
 	}
 	
 	/**
