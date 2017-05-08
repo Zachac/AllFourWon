@@ -53,7 +53,6 @@ public class SubProgramChairActions {
         		List<Paper> toBeReviewed = r.getPapersToBeReviewed();
         		for(int j = 0; j < toBeReviewed.size(); j++) {
         			if(toBeReviewed.get(j).getTitle().equals(papers.get(userPaperChoice-1).getTitle())) {
-        				out.println("REMOVED" + r.getUser());
         				allReviewers.remove(i);
         				break;
         			}
