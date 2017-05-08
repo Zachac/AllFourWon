@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -80,9 +81,11 @@ public class SubProgramChairActions {
         out.println();
 		
         List<Reviewer> allReviewers = currentConference.getReviewers();
-        for (Reviewer r : allReviewers) {
+        Iterator<Reviewer> iterReviewer = allReviewers.iterator();
+        while (iterReviewer.hasNext()) {
+            Reviewer r = iterReviewer.next();
             if (!ConsoleGUI.isReviewerFor(rc.getSubProgramChairRole(), r)) {   
-                allReviewers.remove(r);
+                iterReviewer.remove();
             }
         }
         
@@ -105,9 +108,11 @@ public class SubProgramChairActions {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
         	
-        	for (Paper p : papersToBeReviewed) {
+        	Iterator<Paper> iterPaper = papersToBeReviewed.iterator();
+        	while (iterPaper.hasNext()) {
+        	    Paper p = iterPaper.next();
         	    if (!assignedPapers.contains(p)) {
-        	        papersToBeReviewed.remove(p);
+        	        iterPaper.remove();
         	    }
         	}
         	
