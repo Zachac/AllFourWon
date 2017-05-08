@@ -74,22 +74,50 @@ public class Initialize {
         Paper p = new Paper(null, authors, "Constructing Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
         kevin.addPaper(p);
+        dima.assign(p);
         
 
         p = new Paper(null, authors, "Detecting Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
         brian.assign(p);
+        dima.assign(p);
         
         p = new Paper(null, authors, "Analyzing Fake Titles", zach);
         afterDeadlineConference.submitPaper(p);
         kevin.addPaper(p);
         dima.assign(p);
         
+        p = new Paper(null, authors, "More Stuff on Fake Titles", zach);
+        kevin.addPaper(p);
+        dima.assign(p);
+        
         afterDeadlineConference.addAuthor("IANJ");
         Author ian = afterDeadlineConference.getAuthor("IANJ");
-        authors.add(ian);
+       // authors.add(ian);
+        List<Author> authors2 = new LinkedList<>();
+        authors2.add(ian);
+        Paper p2 = new Paper(null, authors, "Parallel Title Conventions", ian);
+        Paper p3 = new Paper(null, authors, "Another Review", ian);
+        Paper p4 = new Paper(null, authors, "A Review", ian);
+        Paper p5 = new Paper(null, authors, "Some Analyzation", ian);
+        Paper p6 = new Paper(null, authors, "Some more Analyzation", ian);
         
-        afterDeadlineConference.submitPaper(new Paper(null, authors, "Parallel Title Conventions", ian));
+        afterDeadlineConference.submitPaper(p2);
+        afterDeadlineConference.submitPaper(p3);
+        afterDeadlineConference.submitPaper(p4);
+        afterDeadlineConference.submitPaper(p5);
+        afterDeadlineConference.submitPaper(p6);
+        kevin.addPaper(p2);
+        kevin.addPaper(p3);
+        kevin.addPaper(p4);
+        kevin.addPaper(p5);
+        kevin.addPaper(p6);
+        dima.assign(p2);
+        dima.assign(p3);
+        dima.assign(p4);
+        dima.assign(p5);
+        //dima.assign(p6);
+        
         
         afterDeadlineConference.setDeadline(new Date(1487419200000L));
         
