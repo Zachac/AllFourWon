@@ -73,9 +73,10 @@ public class Reviewer extends AbstractRole {
                 numberOfReviews++;
                 papersToBeReviewed.add(p);                
             }
+            return true;
         }
         
-        return authorIsDifferent && !isAtPaperLimit();
+        return false;
     }
 
     /**
@@ -83,7 +84,7 @@ public class Reviewer extends AbstractRole {
      * @return true if at paper limit, false otherwise.
      */
     public boolean isAtPaperLimit() {
-        return numberOfReviews >= REVIEW_LIMIT;
+        return numberOfReviews > REVIEW_LIMIT;
     }
 
     /**

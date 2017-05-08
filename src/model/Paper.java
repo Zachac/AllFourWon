@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -48,7 +49,7 @@ public class Paper implements Serializable {
      */
     public Paper(Path filePath, List<Author> theAuthors, String theTitle, Author submitter) {
         thePaperTitle = theTitle;
-        theAuthorNames = theAuthors;
+        theAuthorNames = new LinkedList<>(theAuthors);
         theSubmitter = submitter;
         theSubmissionDate = new Date();
         
@@ -84,7 +85,7 @@ public class Paper implements Serializable {
      * @return list of the author names.
      */
     public List<Author> getAuthors() {
-        return theAuthorNames;
+        return new LinkedList<>(theAuthorNames);
     }
     
     /**

@@ -93,7 +93,7 @@ public class AuthorActions extends Throwable {
 		for(int i = 0; i < theCoAuthors.size(); i++) {
             System.out.print(" " + theCoAuthors.get(i).getUser());
         }
-		output.println("\" Proceed? (Yes/No): ");
+		output.print("\" Proceed? (Yes/No): ");
 		String ans = input.nextLine().trim().toUpperCase();
 
 		if (ans.equals("YES") || ans.equals("Y")) {

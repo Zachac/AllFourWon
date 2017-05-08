@@ -102,16 +102,22 @@ public class Initialize {
         Paper p5 = new Paper(null, authors, "Some Analyzation", ian);
         Paper p6 = new Paper(null, authors, "Some more Analyzation", ian);
         
+        afterDeadlineConference.addAuthor("BRIANG5");
+        authors.add(afterDeadlineConference.getAuthor("BRIANG5"));
+        Paper p7 = new Paper(null, authors, "A Papers Title", zach);
+        
         afterDeadlineConference.submitPaper(p2);
         afterDeadlineConference.submitPaper(p3);
         afterDeadlineConference.submitPaper(p4);
         afterDeadlineConference.submitPaper(p5);
         afterDeadlineConference.submitPaper(p6);
+        afterDeadlineConference.submitPaper(p7);
         kevin.addPaper(p2);
         kevin.addPaper(p3);
         kevin.addPaper(p4);
         kevin.addPaper(p5);
         kevin.addPaper(p6);
+        kevin.addPaper(p7);
         dima.assign(p2);
         dima.assign(p3);
         dima.assign(p4);

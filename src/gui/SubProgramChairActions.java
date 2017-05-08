@@ -64,10 +64,21 @@ public class SubProgramChairActions {
             
             Integer userReviewerChoice = getReviewerIndexInput(out, in, allReviewers);      
             if (userReviewerChoice != 0) {
-            	allReviewers.get(userReviewerChoice - 1).assign(papers.get(userPaperChoice - 1));
+            	boolean result = allReviewers.get(userReviewerChoice - 1).assign(papers.get(userPaperChoice - 1));
             	out.println();
-            	out.println("Successfully asssigned \"" + allReviewers.get(userReviewerChoice - 1).getUser() 
-            			+ "\" to review " + "\"" + papers.get(userPaperChoice - 1).getTitle() + "\"");
+            	
+            	if (result) {
+            		out.println("Successfully asssigned \"" + allReviewers.get(userReviewerChoice - 1).getUser() 
+            				+ "\" to review " + "\"" + papers.get(userPaperChoice - 1).getTitle() + "\"");            		
+            	} else {
+            		out.print("Failed to assign reviewer: ");
+            		
+            		if (allReviewers.get(userReviewerChoice - 1).isAtPaperLimit()) {
+            			out.print("they already are at the max paper limit.\n");
+            		} else {
+            			out.print("they are a co-author of that paper.\n");
+            		}
+            	}
             }
         }
 	}
