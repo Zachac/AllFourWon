@@ -47,7 +47,18 @@ public class SubProgramChairActions {
         	
         	List<Reviewer> allReviewers = currentConference.getReviewers();
         	
-        	//allReviewers.get(0).getPapersToBeReviewed()
+        	// Removing Reviewers from the list if they are already reviewing the paper
+        	for(int i = 0; i<allReviewers.size(); i++) {
+        		Reviewer r = allReviewers.get(i);
+        		List<Paper> toBeReviewed = r.getPapersToBeReviewed();
+        		for(int j = 0; j < toBeReviewed.size(); j++) {
+        			if(toBeReviewed.get(j).getTitle().equals(papers.get(userPaperChoice-1).getTitle())) {
+        				out.println("REMOVED" + r.getUser());
+        				allReviewers.remove(i);
+        				break;
+        			}
+        		}
+        	}
         	
         	printListOfReviewers(out, allReviewers);
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
