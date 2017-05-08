@@ -36,14 +36,15 @@ public class SubProgramChairActions {
         	out.println("\t" + (i+1) + ". " + papers.get(i).getTitle());
         }
         out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
-        //int userPaperChoice = in.nextInt();
         Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
-        if (userPaperChoice > papers.size() || userPaperChoice == null) {
+        while (userPaperChoice > papers.size() || userPaperChoice == null) {
         	out.println();
         	out.println("Could not find paper at index " + userPaperChoice + "!");
+        	out.println("Please enter another value (or 0 to cancel): ");
+        	userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         }
         
-        else if (userPaperChoice != 0) {
+        if (userPaperChoice != 0) {
         	out.println();
         	out.println("Paper Title: " + papers.get(userPaperChoice-1).getTitle());
         	
@@ -53,14 +54,15 @@ public class SubProgramChairActions {
             }
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
-        	//int userReviewerChoice = in.nextInt();
         	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-            if (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
+            while (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
             	out.println();
             	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+            	out.println("Please enter another value (or 0 to cancel): ");
+            	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
             }
             
-            else if (userReviewerChoice != 0) {
+            if (userReviewerChoice != 0) {
             	allReviewers.get(userReviewerChoice - 1).assign(papers.get(userPaperChoice - 1));
             	out.println();
             	out.println("Successfully asssigned \"" + allReviewers.get(userReviewerChoice - 1).getUser() 
@@ -99,14 +101,15 @@ public class SubProgramChairActions {
     	
     	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
     	
-    	//int userReviewerChoice = in.nextInt();
     	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-        if (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
+        while (userReviewerChoice > allReviewers.size() || userReviewerChoice == null) {
         	out.println();
         	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
+        	out.println("Please enter another value (or 0 to cancel): ");
+        	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
         }
         
-        else if (userReviewerChoice != 0) {
+        if (userReviewerChoice != 0) {
         	Reviewer reviewer = allReviewers.get(userReviewerChoice-1);
         	List<Paper> papersToBeReviewed = reviewer.getPapersToBeReviewed();
         	
@@ -123,15 +126,16 @@ public class SubProgramChairActions {
         	}
         	out.print("Enter the associated number of the Paper you want to remove from this Reviewer (or 0 to cancel): ");
         	
-        	//int userPaperChoice = in.nextInt();
         	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         	
-        	if (userPaperChoice > papersToBeReviewed.size() || userPaperChoice == null) {
+        	while (userPaperChoice > papersToBeReviewed.size() || userPaperChoice == null) {
         		out.println();
-            	out.println("Could not find Paper at index " + userReviewerChoice + "!");
+            	out.println("Could not find Paper at index " + userPaperChoice + "!");
+            	out.println("Please enter another value (or 0 to cancel): ");
+            	userPaperChoice = checkIfValidIntegerInput(in.nextLine());
             }
         	
-        	else if(userPaperChoice != 0) {
+        	if(userPaperChoice != 0) {
         		reviewer.removePaper(papersToBeReviewed.get((userPaperChoice-1)));
         		out.println();
         		out.println("Successcully removed Reviewer \"" + reviewer.getUser() + "\" from paper \"" 
