@@ -64,7 +64,7 @@ public class AuthorActions extends Throwable {
 		String paperTitle = input.nextLine();	
 		theCoAuthors.addAll(getCoAuthorsOfPaper(info));
 		Paper conferenceSubmission = new Paper(Paths.get(filePath), theCoAuthors, paperTitle, currentAuthor);
-		paperSubmissionConfirmation(conferenceSubmission, info, currentConference);
+		paperSubmissionConfirmation(conferenceSubmission, info, currentConference, theCoAuthors);
 	}
 	/**
 	 * This shows the user if they want to submit the paper they created.
@@ -74,8 +74,8 @@ public class AuthorActions extends Throwable {
 	 * 		The user info and all related fields must be valid
 	 * 		All author information must be valid.
 	 * 		The conference must be able to receive papers.
-	 * 		The paper must already be created.
-	 *  	It must not be past the conference's submission deadline
+	 * 		The paper must already be created. With atleast 1 author.
+	 *  	It must not be past the conference's submission deadline.
 	 * Postconditions: 
 	 * 		The specified paper will be successfully submitted to the conference.
 	 * 
@@ -84,12 +84,16 @@ public class AuthorActions extends Throwable {
 	 * @param thePaper the paper object being submitted to the conference.
 	 * @param theConference the conference that the paper is being submitted to
 	 */
-	public static void paperSubmissionConfirmation(Paper thePaper, UserInfo info, Conference theConference) {
+	public static void paperSubmissionConfirmation(Paper thePaper, UserInfo info, Conference theConference, List<Author> theCoAuthors) {
 		PrintStream output = info.out;
 		Scanner input = info.in;
 		theConference = info.getCurrentConference();
-		// Currently I need a way to display the co authors of the paper.
-		output.print("You are about to submit the paper: \"" + thePaper.getTitle() + "\" Proceed? (Yes/No): ");
+
+		output.print("You are about to submit the paper: \"" + thePaper.getTitle() + " By:");
+		for(int i = 0; i < theCoAuthors.size(); i++) {
+            System.out.print(" " + theCoAuthors.get(i).getUser());
+        }
+		output.println("\" Proceed? (Yes/No): ");
 		String ans = input.nextLine().trim().toUpperCase();
 
 		if (ans.equals("YES") || ans.equals("Y")) {
