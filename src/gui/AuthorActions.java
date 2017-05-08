@@ -400,7 +400,6 @@ public class AuthorActions extends Throwable {
 			
 			// I have to create a new scanner because printStream caused a bug.
 			choice = ConsoleGUI.getNumberInput(info);
-
 			if (choice.equals(0)) {
 				output.print("Enter the username of the Co-author: ");
 				String coAuthorUserName = input.nextLine().trim().toUpperCase();

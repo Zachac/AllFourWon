@@ -125,17 +125,20 @@ public class ConsoleGUI {
 	 * @param info the user we are dealing with.
 	 * @return the number, or null if the user gave an invalid number.
 	 */
-	public static Integer getNumberInput(UserInfo info) {
-        String inputLine = info.in.nextLine();
-        
-        Integer choice;
-        
-        try {
-            choice = Integer.parseInt(inputLine);           
-        } catch (NumberFormatException e) { 
-            choice = null;
+	public static Integer getNumberInput(UserInfo info) {             
+        Integer choice = null;
+        boolean done = false;
+        while (!done) {
+	        try {
+	        	String inputLine = info.in.nextLine();
+	            choice = Integer.parseInt(inputLine);    
+	            done = true;
+	        } catch (NumberFormatException e) { 
+	        	System.out.println("You did not type in an appropriate integer.Try Again:");
+	            choice = null;
+	        }
+	   
         }
-        
         return choice;
 	}
 	
