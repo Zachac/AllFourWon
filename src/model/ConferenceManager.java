@@ -14,18 +14,24 @@ public class ConferenceManager implements Serializable {
 	
 	private List<Conference> conferences;
 	
-	
+	/**
+	 * Constructor that creates the ConferenceManager object
+	 */
 	public ConferenceManager () {
 	    conferences = new LinkedList<Conference>();
 	}
 	
 	/**
 	 * Adds a conference to a list.
+	 * 
 	 * @param c conference object.
 	 * @throws NullPointerException if the given conference is null.
 	 * 
 	 * if the conference is already being managed,
 	 * the result will be true, and the function will not effect anything.
+	 * 
+	 * Postconditions:
+	 * 		-adds a Conference to the ConferenceManager
 	 * 
 	 * @return if the conference was successfully added.
 	 */
@@ -46,6 +52,9 @@ public class ConferenceManager implements Serializable {
 	 * 
 	 * if the given conference is not being managed,
 	 * the method will return false without effecting anything
+	 * 
+	 * Postconditions:
+	 * 		-removes a Conference from the ConferenceManager
 	 * 
 	 * @param c conference object
      * @throws NullPointerException if the given conference is null.
