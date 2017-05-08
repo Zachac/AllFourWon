@@ -49,6 +49,12 @@ public class Reviewer extends AbstractRole {
 
     /**
      * Assigns paper to reviewer.
+     * Preconditions:
+     * 		-Paper is not null
+     * 		-Paper's getAuthors() method does not return null
+     * Postconditions:
+     * 		-Assigns the passed in Paper for the Reviewer to review
+     * 
      * @param p the Paper assigned to reviewer.
      * @return true if assignable, false otherwise.
      */
@@ -99,6 +105,11 @@ public class Reviewer extends AbstractRole {
     
     /**
      * Removes a Paper from the Papers that the Reviewer is to review.
+     * Preconditions:
+     * 		-Paper is not null
+     * 		-Paper's getTitle() method does not return null
+     * Postconditions:
+     * 		-Removes the passed in paper from the Reviewer's Papers to review
      * 
      * @param p Paper to be removed.
      * @return true if paper found and removed, false otherwise
