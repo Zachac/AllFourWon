@@ -47,6 +47,8 @@ public class SubProgramChairActions {
         	
         	List<Reviewer> allReviewers = currentConference.getReviewers();
         	
+        	//allReviewers.get(0).getPapersToBeReviewed()
+        	
         	printListOfReviewers(out, allReviewers);
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
             
