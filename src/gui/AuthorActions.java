@@ -62,7 +62,7 @@ public class AuthorActions extends Throwable {
 		
 		output.print("Enter the title of the paper:");
 		String paperTitle = input.nextLine();	
-		theCoAuthors = createNewListOfAuthorsOfPaper(info);
+		theCoAuthors.addAll(getCoAuthorsOfPaper(info));
 		Paper conferenceSubmission = new Paper(Paths.get(filePath), theCoAuthors, paperTitle, currentAuthor);
 		paperSubmissionConfirmation(conferenceSubmission, info, currentConference);
 	}
@@ -321,7 +321,7 @@ public class AuthorActions extends Throwable {
 	 */
 	private static Paper changeAuthorsOfPaper(Paper theOriginalPaper, UserInfo info) {
 		
-		List<Author> newListOfAuthors = createNewListOfAuthorsOfPaper(info);
+		List<Author> newListOfAuthors = getCoAuthorsOfPaper(info);
 		
 		Paper editedPaper = new Paper(theOriginalPaper.getDocumentPath(), newListOfAuthors, 
 				theOriginalPaper.getTitle(), theOriginalPaper.getTheSubmitter());
@@ -374,7 +374,7 @@ public class AuthorActions extends Throwable {
 	 * @param info the information of the user
 	 * @return the new list of authors
 	 */
-	private static List<Author> createNewListOfAuthorsOfPaper(UserInfo info) {
+	private static List<Author> getCoAuthorsOfPaper(UserInfo info) {
 		PrintStream output = info.out;
 		Scanner input = info.in;
 		Integer choice = -1;

@@ -3,7 +3,6 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class ReviewerTest {
 	@Before
 	public void setup() {
 		reviewerTestObject = new Reviewer(nameOfThisReviewer);
-		filePathOfPaper = Paths.get("temp/file/path");
+		filePathOfPaper = null;
 		listOfAuthorsOfPaper = new ArrayList<>();
 		
 		Author submitter = new Author("simplesubmitter");

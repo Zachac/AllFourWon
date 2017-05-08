@@ -6,7 +6,6 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class SubProgramTest {
 	@Before
 	public void setUp() throws Exception {
 		//paperList = new ArrayList<>();
-		paperFilePath = Paths.get("temp/file/path");
+		paperFilePath = null;
 		listOfAuthorsForPaper = new ArrayList<>();
 		listOfAuthorsForPaper.add(new Author("Ian"));
 		listOfAuthorsForPaper.add(new Author("Dimitry"));

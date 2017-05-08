@@ -1,6 +1,12 @@
 package model;
 
+
+import static java.nio.file.StandardCopyOption.*;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -33,17 +39,45 @@ public class Paper implements Serializable {
     
     /**
      * Constructor for paper object.
+     * 
+     * The filePath must point to a valid file (exists and isn't a directory). 
+     * 
      * @param file
      * @param authors
      * @param title
      */
     public Paper(Path filePath, List<Author> theAuthors, String theTitle, Author submitter) {
-        theFilePath = filePath;
         thePaperTitle = theTitle;
         theAuthorNames = theAuthors;
         theSubmitter = submitter;
         theSubmissionDate = new Date();
-        stringFilePath = (filePath == null) ? null : filePath.toString();
+        
+        if (filePath != null) {
+            File originalFile = filePath.toFile();
+            
+            if (!originalFile.exists() || originalFile.isDirectory()) {
+                throw new IllegalArgumentException("Invalid file path!");
+            }
+            
+            StringBuilder newFile = new StringBuilder();
+            newFile.append("data/papers/");
+            newFile.append(theSubmissionDate.getTime());
+            newFile.append("-");
+            newFile.append(originalFile.getName());
+            
+            
+            try {
+                theFilePath = Files.copy(filePath, Paths.get(newFile.toString()), REPLACE_EXISTING);
+                stringFilePath = newFile.toString();   
+                System.out.println(theFilePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            theFilePath = null;
+            stringFilePath = null;            
+        }
+        
     }
     
     /**

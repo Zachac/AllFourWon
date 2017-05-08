@@ -3,7 +3,6 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +34,7 @@ public class PaperTest {
 	
 	@Before
 	public void setUp() {
-		filePathOfPaper = Paths.get("temp/file/path");
+		filePathOfPaper = null;
 		listOfAuthorsOfPaper = new ArrayList<>();
 		listOfAuthorsOfPaper.add(new Author("James"));
 		listOfAuthorsOfPaper.add(new Author("John"));
