@@ -34,7 +34,7 @@ public class SubProgramChairActions {
         printListOfPapers(out, papers);
         out.print("Enter the associated number of the paper to which you want to assign a Reviewer (or 0 to cancel): ");
         Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
-        while (userPaperChoice > papers.size() || userPaperChoice < 0 || userPaperChoice == null) {
+        while (userPaperChoice == null || userPaperChoice > papers.size() || userPaperChoice < 0) {
         	out.println();
         	out.println("Could not find paper at index " + userPaperChoice + "!");
         	printListOfPapers(out, papers);
@@ -52,7 +52,7 @@ public class SubProgramChairActions {
         	out.print("Enter the associated number of the Reviewer you want to assign to this paper (or 0 to cancel): ");
         	
         	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-            while (userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 || userReviewerChoice == null) {
+            while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0) {
             	out.println();
             	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
             	printListOfReviewers(out, allReviewers);
@@ -96,11 +96,11 @@ public class SubProgramChairActions {
     	out.print("Enter the associated number of the Reviewer you want to remove (or 0 to cancel): ");
     	
     	Integer userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
-        while (userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 || userReviewerChoice == null) {
+        while (userReviewerChoice == null || userReviewerChoice > allReviewers.size() || userReviewerChoice < 0 ) {
         	out.println();
         	out.println("Could not find Reviewer at index " + userReviewerChoice + "!");
         	printListOfReviewers(out, allReviewers);
-        	out.println("Please enter another value (or 0 to cancel): ");
+        	out.print("Please enter another value (or 0 to cancel): ");
         	userReviewerChoice = checkIfValidIntegerInput(in.nextLine());
         }
         
@@ -121,7 +121,7 @@ public class SubProgramChairActions {
         	
         	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
         	
-        	while (userPaperChoice > papersToBeReviewed.size() || userPaperChoice < 0 || userPaperChoice == null) {
+        	while (userPaperChoice == null || userPaperChoice > papersToBeReviewed.size() || userPaperChoice < 0 ) {
         		out.println();
             	out.println("Could not find Paper at index " + userPaperChoice + "!");
             	printListOfPapers(out, papersToBeReviewed);
