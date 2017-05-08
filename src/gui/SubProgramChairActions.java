@@ -113,14 +113,7 @@ public class SubProgramChairActions {
         	printListOfPapers(out, papersToBeReviewed);
         	out.print("Enter the associated number of the Paper you want to remove from this Reviewer (or 0 to cancel): ");
         	
-        	Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());
-        	while (userPaperChoice == null || userPaperChoice > papersToBeReviewed.size() || userPaperChoice < 0 ) {
-        		out.println();
-            	out.println("Could not find Paper at index " + userPaperChoice + "!");
-            	printListOfPapers(out, papersToBeReviewed);
-            	out.println("Please enter another value (or 0 to cancel): ");
-            	userPaperChoice = checkIfValidIntegerInput(in.nextLine());
-            }
+        	Integer userPaperChoice = getPaperIndexInput(out, in, papersToBeReviewed);
         	
         	if(userPaperChoice != 0) {
         		reviewer.removePaper(papersToBeReviewed.get((userPaperChoice-1)));
@@ -132,9 +125,17 @@ public class SubProgramChairActions {
 		
 	}
 	
+	/**
+	 * Private helper method to get user's input on which paper they choose.
+	 * 
+	 * @param out PrintStream where to print prompts and paper list
+	 * @param in Scanner from which to get user's input
+	 * @param papers List of papers from which the user must choose
+	 * @return
+	 */
 	private static int getPaperIndexInput(PrintStream out, Scanner in, List<Paper> papers) {
 		Integer userPaperChoice = checkIfValidIntegerInput(in.nextLine());	
-    	while (userPaperChoice == null ||userPaperChoice > papers.size() || userPaperChoice < 0) {
+    	while (userPaperChoice == null || userPaperChoice > papers.size() || userPaperChoice < 0) {
     		out.println();
         	out.println("Could not find Paper at index " + userPaperChoice + "!");
         	printListOfPapers(out, papers);
