@@ -113,7 +113,7 @@ public class SubProgramChairActions {
         	if(userPaperChoice != 0) {
         		reviewer.removePaper(papersToBeReviewed.get((userPaperChoice-1)));
         		out.println();
-        		out.println("Successcully removed Reviewer \"" + reviewer.getUser() + "\" from paper \"" 
+        		out.println("Successfully removed Reviewer \"" + reviewer.getUser() + "\" from paper \"" 
         				+ papersToBeReviewed.get((userPaperChoice-1)).getTitle() + "\"");
         	}
         }
