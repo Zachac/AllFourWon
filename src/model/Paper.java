@@ -68,8 +68,7 @@ public class Paper implements Serializable {
             
             try {
                 theFilePath = Files.copy(filePath, Paths.get(newFile.toString()), REPLACE_EXISTING);
-                stringFilePath = newFile.toString();   
-                System.out.println(theFilePath);
+                stringFilePath = newFile.toString();
             } catch (IOException e) {
                 e.printStackTrace();
             }
