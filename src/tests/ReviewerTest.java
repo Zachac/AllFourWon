@@ -75,9 +75,7 @@ public class ReviewerTest {
 		//check if empty
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		
-	}
-	
-	//Business rule 2A - Next three methods
+	}	
 	
 	/**
 	 * Assigns one paper and checks if assignment worked properly.
@@ -116,8 +114,6 @@ public class ReviewerTest {
 		assertEquals(reviewerTestObject.getNumberOfReviews(), 0);
 		
 	}
-	
-	//BUSINESS RULE 2B. Tested over the next 3 methods.
 	
 	/**
 	 * Tests if assignment isn't at limit if number of 
